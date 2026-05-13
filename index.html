@@ -11,10 +11,10 @@
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        .drag-handle { cursor: grab; }
-        .drag-handle:active { cursor: grabbing; }
+        select { -webkit-appearance: none; appearance: none; text-align: center; cursor: pointer; }
         .list-enter-active, .list-leave-active { transition: all 0.3s ease; }
         .list-enter-from, .list-leave-to { opacity: 0; transform: translateY(10px); }
+        .list-move { transition: transform 0.3s ease; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans min-h-screen p-4 md:p-8">
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <div class="text-[9px] text-slate-500 uppercase font-bold">Entailed</div>
+                        <div class="text-[9px] text-slate-500 uppercase font-bold">Lenient</div>
                         <div class="text-xl font-mono font-black text-indigo-300">
                             {{ getL0Score.entail }}{{ getL0Score.entail !== '--' ? '%' : '' }}
                         </div>
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <div class="text-[9px] text-slate-500 uppercase font-bold">Entailed</div>
+                        <div class="text-[9px] text-slate-500 uppercase font-bold">Lenient</div>
                         <div class="text-xl font-mono font-black text-emerald-300">
                             {{ getL1Score.entail }}{{ getL1Score.entail !== '--' ? '%' : '' }}
                         </div>
@@ -103,15 +103,29 @@
                     <transition-group name="list">
                         <div v-for="(item, iIndex) in cat[level].ranking" :key="item.site">
 
-                            <div 
-                                class="flex items-center bg-slate-50 border border-slate-200 rounded-lg p-2 shadow-sm relative z-0 transition-all hover:border-indigo-300"
-                                draggable="true"
-                                @dragstart="dragStart($event, cIndex, level, iIndex)"
-                                @dragover.prevent
-                                @drop="drop($event, cIndex, level, iIndex)"
-                                @dragend="dragEnd"
-                                :class="{'opacity-50': dragData && dragData.cIdx === cIndex && dragData.level === level && dragData.itemIdx === iIndex}"
-                            >
+                            <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg p-2 shadow-sm relative z-0 transition-all hover:border-indigo-300">
+                                
+                                <div class="flex flex-col items-center justify-center shrink-0 w-6 text-slate-400">
+                                    <button 
+                                        @click="moveUp(cIndex, level, iIndex)" 
+                                        :disabled="iIndex === 0 || item.rating !== cat[level].ranking[iIndex-1].rating" 
+                                        class="hover:text-indigo-600 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"></path></svg>
+                                    </button>
+                                    <button 
+                                        @click="moveDown(cIndex, level, iIndex)" 
+                                        :disabled="iIndex === cat[level].ranking.length - 1 || item.rating !== cat[level].ranking[iIndex+1].rating" 
+                                        class="hover:text-indigo-600 disabled:opacity-20 disabled:cursor-not-allowed -mt-1 transition-colors"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                </div>
+                                
+                                <div class="flex-grow font-bold text-slate-700 ml-2 text-lg">
+                                    {{ item.site }}
+                                </div>
+
                                 <button 
                                     v-if="iIndex > 0 && item.rating === cat[level].ranking[iIndex-1].rating"
                                     @click="item.tieWithAbove = !item.tieWithAbove" 
@@ -121,19 +135,12 @@
                                 >
                                     =
                                 </button>
-                                <div v-else class="w-6 h-6 shrink-0 mr-2"></div> <div class="drag-handle px-1 text-slate-400 hover:text-slate-600 shrink-0">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                                </div>
-                                
-                                <div class="flex-grow font-bold text-slate-700 ml-2 text-lg">
-                                    {{ item.site }}
-                                </div>
-                                
-                                <div class="flex items-center bg-white border border-slate-200 rounded shrink-0">
+                                <div v-else class="w-6 h-6 shrink-0 mr-2"></div> <div class="flex items-center bg-white border border-slate-200 rounded shrink-0 px-2 shadow-sm">
                                     <select 
                                         v-model.number="item.rating" 
                                         @change="forceSort(cIndex, level)"
-                                        class="py-2 px-3 bg-transparent text-slate-800 font-bold outline-none cursor-pointer"
+                                        class="py-2 px-1 w-full bg-transparent text-slate-800 font-bold outline-none cursor-pointer appearance-none bg-none"
+                                        style="background-image: none;"
                                     >
                                         <option v-for="n in 7" :key="n" :value="n">{{ n }}</option>
                                     </select>
@@ -164,10 +171,9 @@
 
     createApp({
         setup() {
-            const numWebsites = ref(2); // Changed default to 2
+            const numWebsites = ref(2); 
             const websites = reactive([]);
             const categories = reactive([]);
-            const dragData = ref(null);
 
             const generateRankingList = (sites) => {
                 return sites.map(site => ({
@@ -195,10 +201,7 @@
                 if(confirm("DANGER: Wipe all categories and rankings?")) location.reload();
             };
 
-            const forceSort = (cIndex, level) => {
-                const arr = categories[cIndex][level].ranking;
-                arr.sort((a, b) => b.rating - a.rating);
-                
+            const updateTies = (arr) => {
                 for(let i=0; i<arr.length; i++) {
                     if (i === 0 || arr[i].rating !== arr[i-1].rating) {
                         arr[i].tieWithAbove = false;
@@ -206,25 +209,30 @@
                 }
             };
 
-            // DRAG AND DROP
-            const dragStart = (e, cIdx, level, itemIdx) => {
-                dragData.value = { cIdx, level, itemIdx };
-                e.dataTransfer.effectAllowed = 'move';
+            const forceSort = (cIndex, level) => {
+                const arr = categories[cIndex][level].ranking;
+                arr.sort((a, b) => b.rating - a.rating);
+                updateTies(arr);
             };
 
-            const drop = (e, cIdx, level, targetIdx) => {
-                const source = dragData.value;
-                if(source && source.cIdx === cIdx && source.level === level) {
-                    const arr = categories[cIdx][level].ranking;
-                    const [movedItem] = arr.splice(source.itemIdx, 1);
-                    arr.splice(targetIdx, 0, movedItem);
-                    forceSort(cIdx, level);
+            const moveUp = (cIndex, level, iIndex) => {
+                const arr = categories[cIndex][level].ranking;
+                if (iIndex > 0 && arr[iIndex].rating === arr[iIndex - 1].rating) {
+                    const temp = arr[iIndex];
+                    arr[iIndex] = arr[iIndex - 1];
+                    arr[iIndex - 1] = temp;
+                    updateTies(arr);
                 }
-                dragData.value = null; // Clear on drop
             };
 
-            const dragEnd = () => {
-                dragData.value = null; // Clear if dropped outside
+            const moveDown = (cIndex, level, iIndex) => {
+                const arr = categories[cIndex][level].ranking;
+                if (iIndex < arr.length - 1 && arr[iIndex].rating === arr[iIndex + 1].rating) {
+                    const temp = arr[iIndex];
+                    arr[iIndex] = arr[iIndex + 1];
+                    arr[iIndex + 1] = temp;
+                    updateTies(arr);
+                }
             };
 
             // SYNC WEBSITES
@@ -314,10 +322,9 @@
                             const relB = Math.sign(dataB.ranks[siteY] - dataB.ranks[siteX]);
 
                             if (relA !== relB) {
-                                // Strict always deducts
                                 strictNumerator -= 1;
                                 
-                                // Entailed only deducts if ratings didn't force the swap
+                                // Lenient (Entailed) only deducts if ratings didn't force the swap
                                 if (dataB.ratings[siteX] === dataB.ratings[siteY]) {
                                     entailNumerator -= 1;
                                 }
@@ -338,9 +345,9 @@
             const getL1Score = computed(() => calculateAxisScore('l1', 'l2'));
 
             return {
-                numWebsites, categories, dragData,
+                numWebsites, categories,
                 addCategory, removeCategory, resetAll,
-                dragStart, drop, dragEnd, forceSort,
+                moveUp, moveDown, forceSort,
                 getL0Score, getL1Score
             };
         }
