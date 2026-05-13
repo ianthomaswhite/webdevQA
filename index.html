@@ -29,7 +29,7 @@
             </div>
             
             <div class="flex flex-wrap items-center gap-4 shrink-0">
-                <div class="flex items-center gap-3 bg-white p-2 rounded border border-slate-200">
+                <div class="flex items-center gap-2">
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Websites:</label>
                     <input 
                         type="number" 
@@ -40,7 +40,7 @@
                     >
                 </div>
                 
-                <button @click="showL2 = !showL2" :class="['px-4 py-2 rounded text-xs font-bold uppercase tracking-wider border transition-colors', showL2 ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-white text-slate-500 border-slate-200']">
+                <button @click="showL2 = !showL2" class="px-4 py-2 rounded text-xs font-bold uppercase tracking-wider border transition-colors bg-white text-blue-600 border-blue-200 hover:bg-blue-50">
                     {{ showL2 ? 'Hide L2' : 'Show L2' }}
                 </button>
                 
@@ -109,7 +109,7 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-32 overflow-y-auto mt-auto">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto">
                     <div class="mb-1"><strong class="text-slate-800">Old:</strong> One deduction per website per journey if any steps differ, regardless of how many steps differ.</div>
                     <div class="mb-1"><strong class="text-slate-800">New 1:</strong> Deducts exactly one point for every individual step that contains a pass/fail difference between levels.</div>
                     <div><strong class="text-slate-800">New 2:</strong> The same as New 1 except it waives the deduction if the target level is explicitly marked "?".</div>
@@ -173,9 +173,9 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-32 overflow-y-auto mt-auto">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto">
                     <div class="mb-1"><strong class="text-slate-800">Old:</strong> Starts at 7 globally. Deducts per category based on changes >1 (or exactly 1-2/6-7): 1-2 changes = 1 deduction, 3+ changes = 2 deductions. Floor of 1.</div>
-                    <div class="mb-1"><strong class="text-slate-800">New 1:</strong> Deducts exactly one point for every unit of absolute rating difference between levels. Additionally, deducts exactly one point for every relative ranking flip between any pair of websites.</div>
+                    <div class="mb-1"><strong class="text-slate-800">New 1:</strong> Deducts 1 pt per unit of rating difference, and 1 pt for every relative ranking flip between sites.</div>
                     <div><strong class="text-slate-800">New 2:</strong> The same as New 1 except ranking flip deductions are waived if the flip was mathematically forced by the new ratings or if the websites are tied ("=").</div>
                 </div>
             </div>
@@ -237,7 +237,7 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-32 overflow-y-auto mt-auto">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto">
                     <div class="mb-1"><strong class="text-slate-800">Old:</strong> The Journey score out of 7 minus the total global Axis deductions. Floor of 1.</div>
                     <div class="mb-1"><strong class="text-slate-800">New 1:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
                     <div><strong class="text-slate-800">New 2:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
