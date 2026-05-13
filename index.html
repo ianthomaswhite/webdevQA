@@ -12,8 +12,6 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         select { -webkit-appearance: none; appearance: none; text-align: center; cursor: pointer; }
-        
-        /* Remove background differences */
         .uniform-bg { background-color: #ffffff; }
     </style>
 </head>
@@ -83,46 +81,51 @@
             <table class="w-full text-left text-sm whitespace-nowrap min-w-max">
                 <thead>
                     <tr class="bg-slate-100 text-slate-500 uppercase tracking-wider font-semibold text-xs border-b border-slate-200">
-                        <th class="p-3 w-72 sticky left-0 z-10 bg-slate-100 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]">Step</th>
+                        <th class="p-3 w-12 sticky left-0 z-30 bg-slate-100 border-r border-slate-200 text-center">#</th>
+                        <th class="p-3 w-72 sticky left-12 z-20 bg-slate-100 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]">Step</th>
                         <th v-for="site in websites" :key="site" :colspan="showL2 ? 3 : 2" class="p-3 text-center border-r border-slate-200 last:border-r-0 bg-slate-100 text-slate-500">
                             {{ site }}
                         </th>
                     </tr>
-                    <tr class="bg-white text-slate-400 uppercase tracking-wider font-semibold text-[10px] border-b border-slate-200">
-                        <th class="p-2 sticky left-0 z-10 bg-white border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]"></th>
+                    <tr class="bg-white text-slate-400 uppercase tracking-wider font-semibold text-[10px] border-b border-slate-300">
+                        <th class="p-2 sticky left-0 z-30 bg-slate-100 border-r border-slate-200"></th>
+                        <th class="p-2 sticky left-12 z-20 bg-slate-100 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]"></th>
                         <template v-for="(site, idx) in websites" :key="site + '-sub'">
-                            <th class="p-2 text-center w-20 border-r border-slate-200">L0</th>
-                            <th class="p-2 text-center w-20 border-r border-slate-200">L1</th>
-                            <th v-if="showL2" class="p-2 text-center w-20 border-r border-slate-200">L2</th>
+                            <th class="py-1.5 px-1 text-center w-12 border-r border-slate-300 bg-slate-200 text-slate-700">L0</th>
+                            <th class="py-1.5 px-1 text-center w-12 border-r border-slate-300 bg-slate-200 text-slate-700">L1</th>
+                            <th v-if="showL2" class="py-1.5 px-1 text-center w-12 border-r border-slate-400 bg-slate-300 text-slate-800">L2</th>
                         </template>
                     </tr>
                 </thead>
 
-                <tbody class="divide-y-4 divide-slate-200">
+                <tbody class="divide-y-4 divide-slate-300">
                     <template v-for="(step, sIndex) in journey.steps" :key="step.id">
                         
                         <tr class="uniform-bg">
-                            <td rowspan="3" class="p-2 border-r border-slate-200 sticky left-0 z-10 bg-white shadow-[1px_0_0_0_#e2e8f0] align-top">
-                                <textarea v-model="step.stepText" class="w-full h-full min-h-[6rem] p-2 bg-transparent border border-transparent hover:border-slate-200 rounded text-slate-700 outline-none resize-none focus:border-blue-400"></textarea>
+                            <td class="p-2 border-r border-slate-200 sticky left-0 z-20 bg-slate-50 text-center font-black text-slate-400 text-base">
+                                {{ sIndex + 1 }}
+                            </td>
+                            <td class="p-0 border-r border-slate-200 sticky left-12 z-10 bg-white shadow-[1px_0_0_0_#e2e8f0] align-top">
+                                <textarea v-model="step.stepText" class="w-full h-full min-h-[3rem] p-2 bg-transparent border border-transparent hover:border-slate-200 rounded text-slate-700 outline-none resize-none focus:border-blue-400" placeholder="Step description..."></textarea>
                             </td>
                             
                             <template v-for="site in websites" :key="site + step.id + 'r1'">
-                                <td class="p-1 border-r border-slate-200">
-                                    <select v-model="step.data[site].l0" class="w-full h-8 border border-slate-200 rounded bg-white text-lg outline-none hover:border-blue-400">
+                                <td class="px-1 py-1.5 border-r border-slate-200">
+                                    <select v-model="step.data[site].l0" class="w-full h-7 border border-slate-200 rounded bg-white text-base outline-none hover:border-blue-400">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td class="p-1 border-r border-slate-200">
-                                    <select v-model="step.data[site].l1" class="w-full h-8 border border-slate-200 rounded bg-white text-lg outline-none hover:border-blue-400" :class="{'bg-red-50 border-red-300': isErrorL0(step.data[site])}">
+                                <td class="px-1 py-1.5 border-r border-slate-200">
+                                    <select v-model="step.data[site].l1" class="w-full h-7 border border-slate-200 rounded bg-white text-base outline-none hover:border-blue-400" :class="{'bg-red-50 border-red-300': isErrorL0(step.data[site])}">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td v-if="showL2" class="p-1 border-r border-slate-200">
-                                    <select v-model="step.data[site].l2" class="w-full h-8 border border-slate-200 rounded bg-white text-lg outline-none hover:border-blue-400" :class="{'bg-red-50 border-red-300': isErrorL1(step.data[site])}">
+                                <td v-if="showL2" class="px-1 py-1.5 border-r border-slate-200">
+                                    <select v-model="step.data[site].l2" class="w-full h-7 border border-slate-200 rounded bg-white text-base outline-none hover:border-blue-400" :class="{'bg-red-50 border-red-300': isErrorL1(step.data[site])}">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
@@ -131,37 +134,59 @@
                             </template>
                         </tr>
 
-                        <tr class="uniform-bg border-b border-slate-100">
+                        <tr class="uniform-bg border-t border-slate-100">
+                            <td class="p-1 border-r border-slate-200 sticky left-0 z-20 bg-slate-50 text-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                L0 Note
+                            </td>
+                            <td class="p-0 border-r border-slate-200 sticky left-12 z-10 bg-white shadow-[1px_0_0_0_#e2e8f0]">
+                                <input v-model="step.l0NotesText" class="w-full h-full p-2 text-xs bg-transparent border border-transparent hover:border-slate-200 rounded outline-none text-slate-700 focus:border-blue-400">
+                            </td>
                             <template v-for="site in websites" :key="site + step.id + 'r2'">
-                                <td class="p-1 border-r border-slate-200 text-center">
-                                    <button @click="step.data[site].l0_eq = !step.data[site].l0_eq" class="w-full py-1 text-sm font-black rounded transition-colors" :class="step.data[site].l0_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
+                                <td class="px-1 py-1 border-r border-slate-200 text-center">
+                                    <button @click="step.data[site].l0_eq = !step.data[site].l0_eq" class="w-full py-0.5 text-xs font-black rounded transition-colors" :class="step.data[site].l0_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
                                         ?
                                     </button>
                                 </td>
-                                <td class="p-1 border-r border-slate-200 text-center">
-                                    <button @click="step.data[site].l1_eq = !step.data[site].l1_eq" class="w-full py-1 text-sm font-black rounded transition-colors" :class="step.data[site].l1_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
+                                <td class="px-1 py-1 border-r border-slate-200 text-center">
+                                    <button @click="step.data[site].l1_eq = !step.data[site].l1_eq" class="w-full py-0.5 text-xs font-black rounded transition-colors" :class="step.data[site].l1_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
                                         ?
                                     </button>
                                 </td>
-                                <td v-if="showL2" class="p-1 border-r border-slate-200 text-center">
-                                    <button @click="step.data[site].l2_eq = !step.data[site].l2_eq" class="w-full py-1 text-sm font-black rounded transition-colors" :class="step.data[site].l2_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
+                                <td v-if="showL2" class="px-1 py-1 border-r border-slate-200 text-center">
+                                    <button @click="step.data[site].l2_eq = !step.data[site].l2_eq" class="w-full py-0.5 text-xs font-black rounded transition-colors" :class="step.data[site].l2_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
                                         ?
                                     </button>
                                 </td>
                             </template>
                         </tr>
 
-                        <tr class="uniform-bg">
-                            <td :colspan="totalDataCols" class="p-2 border-r border-slate-200">
-                                <div class="flex items-center">
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-4 shrink-0">Explanation</span>
-                                    <input v-model="step.explanationText" class="w-full p-2 text-sm bg-transparent border border-transparent hover:border-slate-200 rounded outline-none text-slate-700 focus:border-blue-400">
-                                    <button @click="removeStep(jIndex, sIndex)" class="ml-4 text-slate-300 hover:text-red-500 shrink-0" title="Delete Step">
+                        <tr class="uniform-bg border-t border-slate-100">
+                            <td class="p-1 border-r border-slate-200 sticky left-0 z-20 bg-slate-50 text-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                L1 Note
+                            </td>
+                            <td class="p-0 border-r border-slate-200 sticky left-12 z-10 bg-white shadow-[1px_0_0_0_#e2e8f0]">
+                                <input v-model="step.l1NotesText" class="w-full h-full p-2 text-xs bg-transparent border border-transparent hover:border-slate-200 rounded outline-none text-slate-700 focus:border-blue-400">
+                            </td>
+                            
+                            <td :colspan="totalDataCols" :rowspan="showL2 ? 2 : 1" class="p-2 border-r border-slate-200 align-top bg-slate-50/50">
+                                <div class="flex items-start h-full">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-4 shrink-0 mt-2">Explanation</span>
+                                    <textarea v-model="step.explanationText" class="w-full h-full min-h-[3rem] p-2 text-sm bg-white border border-slate-200 rounded outline-none text-slate-700 focus:border-blue-400 resize-none shadow-sm" placeholder="Add overarching explanation or reasoning..."></textarea>
+                                    <button @click="removeStep(jIndex, sIndex)" class="ml-4 mt-1 text-slate-300 hover:text-red-500 shrink-0" title="Delete Step">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                 </div>
                             </td>
                         </tr>
+
+                        <tr v-if="showL2" class="uniform-bg border-t border-slate-100">
+                            <td class="p-1 border-r border-slate-200 sticky left-0 z-20 bg-slate-50 text-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                L2 Note
+                            </td>
+                            <td class="p-0 border-r border-slate-200 sticky left-12 z-10 bg-white shadow-[1px_0_0_0_#e2e8f0]">
+                                <input v-model="step.l2NotesText" class="w-full h-full p-2 text-xs bg-transparent border border-transparent hover:border-slate-200 rounded outline-none text-slate-700 focus:border-blue-400">
+                            </td>
+                            </tr>
 
                     </template>
                 </tbody>
@@ -181,6 +206,8 @@
 
     createApp({
         setup() {
+            // LOGIN logic removed as per previous flow unless requested, assuming integrated version
+            // Initializing directly for ease of access
             const numWebsites = ref(2);
             const websites = reactive([]);
             const journeys = reactive([]);
@@ -199,7 +226,15 @@
                     id: Date.now(),
                     name: `Journey ${journeys.length + 1}`,
                     steps: [
-                        { id: Date.now() + 1, stepText: '', explanationText: '', data: generateSiteData(websites) }
+                        { 
+                            id: Date.now() + 1, 
+                            stepText: '', 
+                            l0NotesText: '',
+                            l1NotesText: '',
+                            l2NotesText: '',
+                            explanationText: '', 
+                            data: generateSiteData(websites) 
+                        }
                     ]
                 });
             };
@@ -208,6 +243,9 @@
                 journeys[jIndex].steps.push({
                     id: Date.now(),
                     stepText: '',
+                    l0NotesText: '',
+                    l1NotesText: '',
+                    l2NotesText: '',
                     explanationText: '',
                     data: generateSiteData(websites)
                 });
@@ -251,9 +289,7 @@
                 return websites.length * (showL2.value ? 3 : 2);
             });
 
-            // If either column is incomplete, do not penalize yet
-            // If either column is marked '?' equivocal, no deduction
-            // Otherwise deduct if they don't match
+            // Scoring logic
             const isErrorL0 = (siteData) => {
                 if (siteData.l0 === '' || siteData.l1 === '') return false;
                 if (siteData.l0_eq || siteData.l1_eq) return false; 
@@ -266,7 +302,6 @@
                 return siteData.l1 !== siteData.l2;
             };
 
-            // Calculate L0 Score (vs L1)
             const getL0Score = computed(() => {
                 let validChecks = 0;
                 let errors = 0;
@@ -275,7 +310,6 @@
                     j.steps.forEach(s => {
                         websites.forEach(site => {
                             const d = s.data[site];
-                            // Check is valid only when both fields have an input
                             if (d && d.l0 !== '' && d.l1 !== '') {
                                 validChecks++;
                                 if (isErrorL0(d)) errors++;
@@ -288,7 +322,6 @@
                 return (((validChecks - errors) / validChecks) * 100).toFixed(1);
             });
 
-            // Calculate L1 Score (vs L2)
             const getL1Score = computed(() => {
                 let validChecks = 0;
                 let errors = 0;
@@ -297,7 +330,6 @@
                     j.steps.forEach(s => {
                         websites.forEach(site => {
                             const d = s.data[site];
-                            // Check is valid only when both fields have an input
                             if (d && d.l1 !== '' && d.l2 !== '') {
                                 validChecks++;
                                 if (isErrorL1(d)) errors++;
