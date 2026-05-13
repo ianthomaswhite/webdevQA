@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Journey & Axis Audit</title>
+    <title>JOURNEY & AXIS AUDIT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
@@ -19,32 +19,32 @@
 </head>
 <body class="bg-white text-slate-900 font-sans min-h-screen p-4 md:p-8">
 
-<div id="app" class="max-w-[1600px] mx-auto space-y-8">
+<div id="app" class="max-w-[1600px] mx-auto space-y-8 uppercase">
 
     <header class="bg-white flex flex-col gap-6 mb-8">
         <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6">
             <div class="max-w-3xl">
-                <h1 class="text-3xl font-bold text-slate-800 tracking-tight">Audit Dashboard</h1>
+                <h1 class="text-3xl font-bold text-slate-800 tracking-tight">AUDIT DASHBOARD</h1>
             </div>
             
             <div class="flex flex-wrap items-center gap-4 shrink-0">
                 <div class="flex items-center gap-2">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Websites:</label>
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">WEBSITES:</label>
                     <input 
                         type="number" 
                         min="2" 
                         max="26"
                         v-model="numWebsites" 
-                        class="w-16 p-1 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-500 outline-none text-center font-bold"
+                        class="w-16 p-1 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-500 outline-none text-center font-mono font-bold"
                     >
                 </div>
                 
                 <button @click="showL2 = !showL2" class="px-4 py-2 rounded text-xs font-bold uppercase tracking-wider border transition-colors bg-white text-blue-600 border-blue-200 hover:bg-blue-50">
-                    {{ showL2 ? 'Hide L2' : 'Show L2' }}
+                    {{ showL2 ? 'HIDE L2' : 'SHOW L2' }}
                 </button>
                 
                 <button @click="resetAll" class="text-xs font-bold text-red-500 hover:text-red-700 bg-white px-4 py-2 rounded border border-red-200 transition-colors uppercase tracking-wider">
-                    Reset
+                    RESET
                 </button>
             </div>
         </div>
@@ -52,29 +52,29 @@
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
             
             <div class="bg-slate-50 border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col h-full">
-                <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Journey Score</div>
+                <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">JOURNEY SCORE</div>
                 
                 <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
                         
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">Old</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ formatPct(journeyStats.l0.origNum, journeyStats.l0.origDen) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(journeyStats.l0.origNum, journeyStats.l0.origDen) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 1</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ formatPct(journeyStats.l0.strictNum, journeyStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(journeyStats.l0.strictNum, journeyStats.l0.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 2</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ formatPct(journeyStats.l0.entailNum, journeyStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(journeyStats.l0.entailNum, journeyStats.l0.den) }}</span>
                             </div>
                         </div>
@@ -86,59 +86,59 @@
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L1</div>
                         
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">Old</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ showL2 ? formatPct(journeyStats.l1.origNum, journeyStats.l1.origDen) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(journeyStats.l1.origNum, journeyStats.l1.origDen) : '--' }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 1</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ showL2 ? formatPct(journeyStats.l1.strictNum, journeyStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(journeyStats.l1.strictNum, journeyStats.l1.den) : '--' }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 2</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ showL2 ? formatPct(journeyStats.l1.entailNum, journeyStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(journeyStats.l1.entailNum, journeyStats.l1.den) : '--' }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-hidden">
-                    <strong class="text-slate-800">Old:</strong> One deduction per website per journey if any steps differ, regardless of how many steps differ.<br>
-                    <strong class="text-slate-800">New 1 (Strict):</strong> Deducts exactly one point for every individual step that contains a pass/fail difference between levels.<br>
-                    <strong class="text-slate-800">New 2 (Lenient):</strong> The same as New 1 except it waives the deduction if the target level is explicitly marked "?".
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-y-auto normal-case mt-auto">
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> One deduction per website per journey if any steps differ, regardless of how many steps differ.</div>
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> Deducts exactly one point for every individual step that contains a pass/fail difference between levels.</div>
+                    <div><strong class="text-slate-800 uppercase">New 2:</strong> The same as New 1 except it waives the deduction if the target level is explicitly marked "?".</div>
                 </div>
             </div>
 
             <div class="bg-slate-50 border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col h-full">
-                <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Axis Score</div>
+                <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">AXIS SCORE</div>
                 
                 <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
                         
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">Old</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">--</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOrigAxisScore(axisStats.l0.origDed, axisStats.l0.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 1</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ formatPct(axisStats.l0.strictNum, axisStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(axisStats.l0.strictNum, axisStats.l0.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 2</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ formatPct(axisStats.l0.entailNum, axisStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(axisStats.l0.entailNum, axisStats.l0.den) }}</span>
                             </div>
                         </div>
@@ -150,59 +150,59 @@
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L1</div>
                         
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">Old</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">--</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOrigAxisScore(axisStats.l1.origDed, axisStats.l1.den) : '--' }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 1</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ showL2 ? formatPct(axisStats.l1.strictNum, axisStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(axisStats.l1.strictNum, axisStats.l1.den) : '--' }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 2</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ showL2 ? formatPct(axisStats.l1.entailNum, axisStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(axisStats.l1.entailNum, axisStats.l1.den) : '--' }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-hidden">
-                    <strong class="text-slate-800">Old:</strong> Starts at 7 globally. Deducts per category based on changes >1 (or exactly 1-2/6-7): 1-2 changes = 1 deduction, 3+ changes = 2 deductions. Floor of 1.<br>
-                    <strong class="text-slate-800">New 1 (Strict):</strong> Deducts exactly one point for every unit of absolute rating difference between levels. Additionally, deducts exactly one point for every relative ranking flip between any pair of websites.<br>
-                    <strong class="text-slate-800">New 2 (Lenient):</strong> The same as New 1 except ranking flip deductions are waived if the flip was mathematically forced by the new ratings or if the websites are tied ("=").
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-y-auto normal-case mt-auto">
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> Starts at 7 globally. Deducts per category based on changes >1 (or exactly 1-2/6-7): 1-2 changes = 1 deduction, 3+ changes = 2 deductions. Floor of 1.</div>
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> Deducts exactly one point for every unit of absolute rating difference between levels. Additionally, deducts exactly one point for every relative ranking flip between any pair of websites.</div>
+                    <div><strong class="text-slate-800 uppercase">New 2:</strong> The same as New 1 except ranking flip deductions are waived if the flip was mathematically forced by the new ratings or if the websites are tied ("=").</div>
                 </div>
             </div>
 
             <div class="bg-slate-50 border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col h-full">
-                <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Total Combined Score</div>
+                <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">TOTAL COMBINED SCORE</div>
                 
                 <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
                         
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">Old</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">--</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOrigOverallScore(journeyStats.l0.origNum, journeyStats.l0.origDen, axisStats.l0.origDed, axisStats.l0.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 1</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ formatPct(journeyStats.l0.strictNum + axisStats.l0.strictNum, journeyStats.l0.den + axisStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(journeyStats.l0.strictNum + axisStats.l0.strictNum, journeyStats.l0.den + axisStats.l0.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 2</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ formatPct(journeyStats.l0.entailNum + axisStats.l0.entailNum, journeyStats.l0.den + axisStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(journeyStats.l0.entailNum + axisStats.l0.entailNum, journeyStats.l0.den + axisStats.l0.den) }}</span>
                             </div>
                         </div>
@@ -214,31 +214,32 @@
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L1</div>
                         
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">Old</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">--</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOrigOverallScore(journeyStats.l1.origNum, journeyStats.l1.origDen, axisStats.l1.origDed, axisStats.l1.den) : '--' }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 1</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ showL2 ? formatPct(journeyStats.l1.strictNum + axisStats.l1.strictNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(journeyStats.l1.strictNum + axisStats.l1.strictNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
-                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">New 2</span>
-                            <div class="text-base font-black">
+                            <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
+                            <div class="font-mono text-base font-black">
                                 <span class="text-indigo-400">{{ showL2 ? formatPct(journeyStats.l1.entailNum + axisStats.l1.entailNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(journeyStats.l1.entailNum + axisStats.l1.entailNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-hidden">
-                    <strong class="text-slate-800">Old:</strong> The Journey score out of 7 minus the total global Axis deductions. Floor of 1.<br>
-                    <strong class="text-slate-800">New 1 & 2:</strong> The aggregated sum of the Journey score numerator and Axis score numerator, divided by the aggregated sum of their respective denominators.
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-y-auto normal-case mt-auto">
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> The Journey score out of 7 minus the total global Axis deductions. Floor of 1.</div>
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
+                    <div><strong class="text-slate-800 uppercase">New 2:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
                 </div>
             </div>
 
@@ -248,15 +249,15 @@
     <div class="w-full h-px bg-slate-200 my-8"></div>
 
     <div class="mb-4">
-        <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">Journey Audit</h2>
+        <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">JOURNEY AUDIT</h2>
     </div>
 
     <div v-for="(journey, jIndex) in journeys" :key="journey.id" class="bg-white mb-10">
         <div class="py-4 bg-white flex justify-between items-center">
-            <input v-model="journey.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 w-1/2" placeholder="Journey Name">
+            <input v-model="journey.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 w-1/2" placeholder="JOURNEY NAME">
             <div class="flex gap-2">
-                <button @click="addStep(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-blue-600 border border-blue-200 rounded hover:bg-blue-50">+ Add Step</button>
-                <button @click="removeJourney(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-red-500 border border-red-200 rounded hover:bg-red-50">Delete Journey</button>
+                <button @click="addStep(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-blue-600 border border-blue-200 rounded hover:bg-blue-50">+ ADD STEP</button>
+                <button @click="removeJourney(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-red-500 border border-red-200 rounded hover:bg-red-50">DELETE JOURNEY</button>
             </div>
         </div>
 
@@ -273,17 +274,17 @@
                                 <td colspan="2" class="p-1 text-center font-bold text-sm border-r border-slate-200">{{ site }}</td>
                             </template>
                             <td :rowspan="showL2 ? 5 : 4" class="w-10 bg-white align-middle text-center">
-                                <button @click="removeStep(jIndex, sIndex)" class="text-slate-400 hover:text-red-600" title="Delete Step">
+                                <button @click="removeStep(jIndex, sIndex)" class="text-slate-400 hover:text-red-600" title="DELETE STEP">
                                     <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </td>
                         </tr>
 
                         <tr class="bg-white text-slate-500 text-[10px] uppercase font-bold tracking-wider border-b border-slate-200">
-                            <td class="p-1 text-center border-r border-slate-200">Level</td>
-                            <td class="p-1 text-center border-r border-slate-200">Notes</td>
+                            <td class="p-1 text-center border-r border-slate-200">LEVEL</td>
+                            <td class="p-1 text-center border-r border-slate-200">NOTES</td>
                             <template v-for="site in websites" :key="site + '-sub'">
-                                <td class="p-1 text-center w-12 border-r border-slate-200">Status</td>
+                                <td class="p-1 text-center w-12 border-r border-slate-200">STATUS</td>
                                 <td class="p-1 text-center w-8 border-r border-slate-200">?</td>
                             </template>
                         </tr>
@@ -359,19 +360,19 @@
     
     <button @click="addJourney" class="w-full py-4 border border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-blue-600 hover:border-blue-400 hover:bg-white uppercase tracking-wider text-sm flex items-center justify-center gap-2 mb-12">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        Add New Journey
+        ADD NEW JOURNEY
     </button>
 
     <div class="w-full h-px bg-slate-200 my-8"></div>
 
     <div class="mb-4">
-        <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">Axis Audit</h2>
+        <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">AXIS AUDIT</h2>
     </div>
 
     <div v-for="(cat, cIndex) in categories" :key="cat.id" class="bg-white mb-10">
         <div class="py-4 bg-white flex justify-between items-center">
-            <input v-model="cat.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 placeholder-slate-400 w-1/2" placeholder="Category Name...">
-            <button @click="removeCategory(cIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-red-500 border border-red-200 rounded hover:bg-red-50 transition-colors shadow-sm">Delete Category</button>
+            <input v-model="cat.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 placeholder-slate-400 w-1/2" placeholder="CATEGORY NAME...">
+            <button @click="removeCategory(cIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-red-500 border border-red-200 rounded hover:bg-red-50 transition-colors shadow-sm">DELETE CATEGORY</button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 pt-4">
@@ -412,7 +413,7 @@
                                     @click="item.tieWithAbove = !item.tieWithAbove" 
                                     class="w-6 h-6 shrink-0 rounded border bg-white flex items-center justify-center text-xs font-black transition-colors mr-2"
                                     :class="item.tieWithAbove ? 'border-indigo-400 text-indigo-600 bg-indigo-50' : 'border-slate-200 text-slate-300 hover:text-slate-500 hover:border-slate-300'"
-                                    title="Toggle Tie"
+                                    title="TOGGLE TIE"
                                 >
                                     =
                                 </button>
@@ -435,7 +436,7 @@
                 </div>
 
                 <div class="mt-auto">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Notes</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">NOTES</span>
                     <textarea v-model="cat[level].notes" class="w-full h-24 p-3 bg-white border border-slate-200 focus:border-indigo-400 rounded-lg outline-none text-sm text-slate-700 resize-none overflow-y-auto"></textarea>
                 </div>
             </div>
@@ -444,7 +445,7 @@
 
     <button @click="addCategory" class="w-full py-4 border border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-indigo-600 hover:border-indigo-400 hover:bg-white uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        Add New Category
+        ADD NEW CATEGORY
     </button>
 
 </div>
@@ -475,7 +476,7 @@
 
             const addJourney = () => {
                 journeys.push({
-                    id: Date.now(), name: `Journey ${journeys.length + 1}`,
+                    id: Date.now(), name: `JOURNEY ${journeys.length + 1}`,
                     steps: [ { id: Date.now() + 1, stepText: '', notes: generateJourneyNotesData(), data: generateJourneySiteData(websites) } ]
                 });
             };
@@ -486,8 +487,8 @@
                 });
             };
 
-            const removeJourney = (jIndex) => { if(confirm("Delete this entire journey?")) journeys.splice(jIndex, 1); };
-            const removeStep = (jIndex, sIndex) => { if(confirm("Delete this step?")) journeys[jIndex].steps.splice(sIndex, 1); };
+            const removeJourney = (jIndex) => { if(confirm("DELETE THIS ENTIRE JOURNEY?")) journeys.splice(jIndex, 1); };
+            const removeStep = (jIndex, sIndex) => { if(confirm("DELETE THIS STEP?")) journeys[jIndex].steps.splice(sIndex, 1); };
 
             const isLenientErrorJourneyL0 = (siteData) => {
                 if (siteData.l0 === '' || siteData.l1 === '') return false;
@@ -575,7 +576,7 @@
                 });
             };
 
-            const removeCategory = (cIndex) => { if(confirm("Delete this category?")) categories.splice(cIndex, 1); };
+            const removeCategory = (cIndex) => { if(confirm("DELETE THIS CATEGORY?")) categories.splice(cIndex, 1); };
 
             const updateTies = (arr) => {
                 for(let i=0; i<arr.length; i++) {
@@ -704,7 +705,7 @@
             // ============================
             // GLOBAL LOGIC / FORMATTERS
             // ============================
-            const resetAll = () => { if(confirm("DANGER: Wipe all data and reset?")) location.reload(); };
+            const resetAll = () => { if(confirm("DANGER: WIPE ALL DATA AND RESET?")) location.reload(); };
 
             watch(numWebsites, (newVal) => {
                 const count = Math.min(Math.max(parseInt(newVal) || 2, 2), 26);
