@@ -74,40 +74,42 @@
                     <tbody class="border-[2px] border-slate-200">
                         <tr class="bg-slate-100 text-slate-800 border-b border-slate-200">
                             <td class="p-1 w-8 text-center font-black text-sm border-r border-slate-200">{{ sIndex + 1 }}</td>
-                            <td class="p-0 w-64 min-w-[16rem] max-w-[16rem] border-r border-slate-200 relative">
-                                <textarea v-model="step.stepText" class="w-full h-16 p-2 bg-transparent outline-none resize-none overflow-y-auto font-semibold text-sm leading-tight" placeholder="Step description..."></textarea>
-                                <button @click="removeStep(jIndex, sIndex)" class="absolute top-1 right-1 bg-slate-100/80 rounded text-slate-400 hover:text-red-600" title="Delete Step">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                </button>
+                            <td class="p-0 w-[32rem] min-w-[32rem] border-r border-slate-200">
+                                <textarea v-model="step.stepText" class="w-full h-16 p-2 bg-transparent outline-none resize-none overflow-y-auto font-semibold text-sm leading-tight"></textarea>
                             </td>
                             <template v-for="site in websites" :key="site">
-                                <td colspan="2" class="p-1 text-center font-bold text-sm border-r border-slate-200 last:border-r-0">{{ site }}</td>
+                                <td colspan="2" class="p-1 text-center font-bold text-sm border-r border-slate-200">{{ site }}</td>
                             </template>
+                            <td :rowspan="showL2 ? 5 : 4" class="w-10 bg-slate-50 align-middle text-center">
+                                <button @click="removeStep(jIndex, sIndex)" class="text-slate-400 hover:text-red-600" title="Delete Step">
+                                    <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </td>
                         </tr>
 
                         <tr class="bg-slate-50 text-slate-500 text-[10px] uppercase font-bold tracking-wider border-b border-slate-200">
                             <td class="p-1 text-center border-r border-slate-200">Level</td>
                             <td class="p-1 text-center border-r border-slate-200">Notes</td>
                             <template v-for="site in websites" :key="site + '-sub'">
-                                <td class="p-1 text-center w-16 border-r border-slate-200">Status</td>
-                                <td class="p-1 text-center w-8 border-r border-slate-200 last:border-r-0">?</td>
+                                <td class="p-1 text-center w-12 border-r border-slate-200">Status</td>
+                                <td class="p-1 text-center w-8 border-r border-slate-200">?</td>
                             </template>
                         </tr>
 
                         <tr class="bg-white hover:bg-slate-50 border-b border-slate-100">
                             <td class="p-1 text-center font-black text-slate-400 border-r border-slate-200 text-xs">L0</td>
-                            <td class="p-0 border-r border-slate-200 w-64 min-w-[16rem] max-w-[16rem]">
-                                <textarea v-model="step.notes.l0" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight" placeholder="..."></textarea>
+                            <td class="p-0 border-r border-slate-200 w-[32rem] min-w-[32rem]">
+                                <textarea v-model="step.notes.l0" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight"></textarea>
                             </td>
                             <template v-for="site in websites" :key="site + '-l0'">
-                                <td class="p-0 border-r border-slate-200 w-16">
+                                <td class="p-0 border-r border-slate-200 w-12">
                                     <select v-model="step.data[site].l0" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-100 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td class="p-0 border-r border-slate-200 last:border-r-0 text-center w-8 bg-slate-50/30">
+                                <td class="p-0 border-r border-slate-200 text-center w-8 bg-slate-50/30">
                                     <button @click="step.data[site].l0_eq = !step.data[site].l0_eq" :class="step.data[site].l0_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-100'" class="w-full h-12 text-sm transition-colors">
                                         ?
                                     </button>
@@ -117,18 +119,18 @@
 
                         <tr class="bg-white hover:bg-slate-50 border-b border-slate-100">
                             <td class="p-1 text-center font-black text-slate-400 border-r border-slate-200 text-xs">L1</td>
-                            <td class="p-0 border-r border-slate-200 w-64 min-w-[16rem] max-w-[16rem]">
-                                <textarea v-model="step.notes.l1" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight" placeholder="..."></textarea>
+                            <td class="p-0 border-r border-slate-200 w-[32rem] min-w-[32rem]">
+                                <textarea v-model="step.notes.l1" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight"></textarea>
                             </td>
                             <template v-for="site in websites" :key="site + '-l1'">
-                                <td class="p-0 border-r border-slate-200 w-16">
+                                <td class="p-0 border-r border-slate-200 w-12">
                                     <select v-model="step.data[site].l1" :class="{'bg-red-50 text-red-700': isErrorL0(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-100 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td class="p-0 border-r border-slate-200 last:border-r-0 text-center w-8 bg-slate-50/30">
+                                <td class="p-0 border-r border-slate-200 text-center w-8 bg-slate-50/30">
                                     <button @click="step.data[site].l1_eq = !step.data[site].l1_eq" :class="step.data[site].l1_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-100'" class="w-full h-12 text-sm transition-colors">
                                         ?
                                     </button>
@@ -138,18 +140,18 @@
 
                         <tr v-if="showL2" class="bg-white hover:bg-slate-50">
                             <td class="p-1 text-center font-black text-slate-400 border-r border-slate-200 text-xs">L2</td>
-                            <td class="p-0 border-r border-slate-200 w-64 min-w-[16rem] max-w-[16rem]">
-                                <textarea v-model="step.notes.l2" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight" placeholder="..."></textarea>
+                            <td class="p-0 border-r border-slate-200 w-[32rem] min-w-[32rem]">
+                                <textarea v-model="step.notes.l2" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight"></textarea>
                             </td>
                             <template v-for="site in websites" :key="site + '-l2'">
-                                <td class="p-0 border-r border-slate-200 w-16">
+                                <td class="p-0 border-r border-slate-200 w-12">
                                     <select v-model="step.data[site].l2" :class="{'bg-red-50 text-red-700': isErrorL1(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-100 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td class="p-0 border-r border-slate-200 last:border-r-0 text-center w-8 bg-slate-50/30">
+                                <td class="p-0 border-r border-slate-200 text-center w-8 bg-slate-50/30">
                                     <button @click="step.data[site].l2_eq = !step.data[site].l2_eq" :class="step.data[site].l2_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-100'" class="w-full h-12 text-sm transition-colors">
                                         ?
                                     </button>
