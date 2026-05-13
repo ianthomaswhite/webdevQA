@@ -12,12 +12,11 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         select { -webkit-appearance: none; appearance: none; text-align: center; cursor: pointer; }
-        .uniform-bg { background-color: #ffffff; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans min-h-screen p-4 md:p-8">
 
-<div id="app" class="max-w-[1600px] mx-auto space-y-8 animate-fade-in">
+<div id="app" class="max-w-[1600px] mx-auto space-y-8">
 
     <header class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col lg:flex-row justify-between items-center gap-6">
         <div>
@@ -27,38 +26,29 @@
         
         <div class="flex flex-wrap items-center gap-6">
             <div class="flex items-center gap-3 bg-slate-50 p-2 rounded border border-slate-200">
-                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Number of Websites:</label>
-                <input 
-                    type="number" 
-                    min="1" 
-                    max="26"
-                    v-model="numWebsites" 
-                    class="w-16 p-1 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-center font-mono font-bold"
-                >
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Websites:</label>
+                <input type="number" min="1" max="26" v-model="numWebsites" class="w-16 p-1 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-center font-mono font-bold">
             </div>
 
-            <button 
-                @click="showL2 = !showL2" 
-                :class="['px-4 py-2 rounded text-xs font-bold uppercase tracking-wider transition-colors border', showL2 ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-slate-100 text-slate-500 border-slate-200']"
-            >
-                {{ showL2 ? 'Hide L2 Column' : 'Show L2 Column' }}
+            <button @click="showL2 = !showL2" :class="['px-4 py-2 rounded text-xs font-bold uppercase tracking-wider border', showL2 ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-slate-100 text-slate-500 border-slate-200']">
+                {{ showL2 ? 'Hide L2' : 'Show L2' }}
             </button>
             
-            <button @click="resetAll" class="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 px-4 py-2 rounded border border-red-100 transition-colors uppercase tracking-wider">
+            <button @click="resetAll" class="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 px-4 py-2 rounded border border-red-100 uppercase tracking-wider">
                 Reset Data
             </button>
         </div>
 
         <div class="bg-slate-800 border border-slate-700 px-6 py-3 rounded-lg shadow-sm flex items-center gap-6 text-white">
             <div class="text-center">
-                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">L0 Score (vs L1)</div>
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">L0 Score</div>
                 <div class="text-2xl font-mono font-black text-blue-400">
                     {{ getL0Score }}{{ getL0Score !== '--' ? '%' : '' }}
                 </div>
             </div>
             <div class="w-px h-10 bg-slate-600"></div>
             <div class="text-center">
-                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">L1 Score (vs L2)</div>
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">L1 Score</div>
                 <div class="text-2xl font-mono font-black" :class="showL2 ? 'text-green-400' : 'text-slate-500'">
                     <span v-if="!showL2">N/A</span>
                     <span v-else>{{ getL1Score }}{{ getL1Score !== '--' ? '%' : '' }}</span>
@@ -70,131 +60,109 @@
     <div v-for="(journey, jIndex) in journeys" :key="journey.id" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         
         <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-            <input v-model="journey.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 placeholder-slate-400 w-1/2" placeholder="Journey Name">
+            <input v-model="journey.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 w-1/2" placeholder="Journey Name">
             <div class="flex gap-2">
-                <button @click="addStep(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-blue-600 border border-blue-200 rounded hover:bg-blue-50 shadow-sm transition-colors">+ Add Step</button>
-                <button @click="removeJourney(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-red-500 border border-red-200 rounded hover:bg-red-50 shadow-sm transition-colors">Delete Journey</button>
+                <button @click="addStep(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-blue-600 border border-blue-200 rounded hover:bg-blue-50">+ Add Step</button>
+                <button @click="removeJourney(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-red-500 border border-red-200 rounded hover:bg-red-50">Delete Journey</button>
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm whitespace-nowrap min-w-max">
-                <thead>
-                    <tr class="bg-slate-100 text-slate-500 uppercase tracking-wider font-semibold text-xs border-b border-slate-200">
-                        <th class="p-3 w-12 sticky left-0 z-30 bg-slate-100 border-r border-slate-200 text-center">#</th>
-                        <th class="p-3 w-72 sticky left-12 z-20 bg-slate-100 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]">Step</th>
-                        <th v-for="site in websites" :key="site" :colspan="showL2 ? 3 : 2" class="p-3 text-center border-r border-slate-200 last:border-r-0 bg-slate-100 text-slate-500">
-                            {{ site }}
-                        </th>
-                    </tr>
-                    <tr class="bg-white text-slate-400 uppercase tracking-wider font-semibold text-[10px] border-b border-slate-300">
-                        <th class="p-2 sticky left-0 z-30 bg-slate-100 border-r border-slate-200"></th>
-                        <th class="p-2 sticky left-12 z-20 bg-slate-100 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]"></th>
-                        <template v-for="(site, idx) in websites" :key="site + '-sub'">
-                            <th class="py-1.5 px-1 text-center w-12 border-r border-slate-300 bg-slate-200 text-slate-700">L0</th>
-                            <th class="py-1.5 px-1 text-center w-12 border-r border-slate-300 bg-slate-200 text-slate-700">L1</th>
-                            <th v-if="showL2" class="py-1.5 px-1 text-center w-12 border-r border-slate-400 bg-slate-300 text-slate-800">L2</th>
-                        </template>
-                    </tr>
-                </thead>
-
-                <tbody class="divide-y-4 divide-slate-300">
-                    <template v-for="(step, sIndex) in journey.steps" :key="step.id">
-                        
-                        <tr class="uniform-bg">
-                            <td class="p-2 border-r border-slate-200 sticky left-0 z-20 bg-slate-50 text-center font-black text-slate-400 text-base">
-                                {{ sIndex + 1 }}
+        <div class="overflow-x-auto p-4">
+            <table class="w-full text-left text-sm whitespace-nowrap min-w-max border-collapse">
+                <template v-for="(step, sIndex) in journey.steps" :key="step.id">
+                    <tbody class="border-[3px] border-slate-300">
+                        <tr class="bg-slate-300 text-slate-900 border-b border-slate-400">
+                            <td class="p-2 w-12 text-center font-black text-lg border-r border-slate-400">{{ sIndex + 1 }}</td>
+                            <td class="p-0 min-w-[300px] border-r border-slate-400 relative">
+                                <textarea v-model="step.stepText" class="w-full h-full min-h-[2.5rem] p-2 bg-transparent outline-none resize-none font-semibold placeholder-slate-500" placeholder="Step Description..."></textarea>
+                                <button @click="removeStep(jIndex, sIndex)" class="absolute top-2 right-2 text-slate-500 hover:text-red-600" title="Delete Step">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
                             </td>
-                            <td class="p-0 border-r border-slate-200 sticky left-12 z-10 bg-white shadow-[1px_0_0_0_#e2e8f0] align-top">
-                                <textarea v-model="step.stepText" class="w-full h-full min-h-[3rem] p-2 bg-transparent border border-transparent hover:border-slate-200 rounded text-slate-700 outline-none resize-none focus:border-blue-400" placeholder="Step description..."></textarea>
-                            </td>
-                            
-                            <template v-for="site in websites" :key="site + step.id + 'r1'">
-                                <td class="px-1 py-1.5 border-r border-slate-200">
-                                    <select v-model="step.data[site].l0" class="w-full h-7 border border-slate-200 rounded bg-white text-base outline-none hover:border-blue-400">
-                                        <option value="" disabled selected></option>
-                                        <option value="✅">✅</option>
-                                        <option value="❌">❌</option>
-                                    </select>
-                                </td>
-                                <td class="px-1 py-1.5 border-r border-slate-200">
-                                    <select v-model="step.data[site].l1" class="w-full h-7 border border-slate-200 rounded bg-white text-base outline-none hover:border-blue-400" :class="{'bg-red-50 border-red-300': isErrorL0(step.data[site])}">
-                                        <option value="" disabled selected></option>
-                                        <option value="✅">✅</option>
-                                        <option value="❌">❌</option>
-                                    </select>
-                                </td>
-                                <td v-if="showL2" class="px-1 py-1.5 border-r border-slate-200">
-                                    <select v-model="step.data[site].l2" class="w-full h-7 border border-slate-200 rounded bg-white text-base outline-none hover:border-blue-400" :class="{'bg-red-50 border-red-300': isErrorL1(step.data[site])}">
-                                        <option value="" disabled selected></option>
-                                        <option value="✅">✅</option>
-                                        <option value="❌">❌</option>
-                                    </select>
-                                </td>
+                            <template v-for="site in websites" :key="site">
+                                <td colspan="2" class="p-2 text-center font-bold text-base border-r border-slate-400 last:border-r-0">{{ site }}</td>
                             </template>
                         </tr>
 
-                        <tr class="uniform-bg border-t border-slate-100">
-                            <td class="p-1 border-r border-slate-200 sticky left-0 z-20 bg-slate-50 text-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                                L0 Note
+                        <tr class="bg-slate-200 text-slate-700 text-[10px] uppercase font-bold tracking-wider border-b border-slate-300">
+                            <td class="p-2 text-center border-r border-slate-300">Level</td>
+                            <td class="p-2 text-center border-r border-slate-300">Notes</td>
+                            <template v-for="site in websites" :key="site + '-sub'">
+                                <td class="p-2 text-center w-24 border-r border-slate-300">Status</td>
+                                <td class="p-2 text-center w-12 border-r border-slate-300 last:border-r-0">?</td>
+                            </template>
+                        </tr>
+
+                        <tr class="bg-white hover:bg-slate-50 border-b border-slate-200">
+                            <td class="p-2 text-center font-black text-slate-400 border-r border-slate-200">L0</td>
+                            <td class="p-0 border-r border-slate-200">
+                                <input v-model="step.notes.l0" class="w-full h-full p-2 bg-transparent outline-none text-slate-700" placeholder="L0 notes...">
                             </td>
-                            <td class="p-0 border-r border-slate-200 sticky left-12 z-10 bg-white shadow-[1px_0_0_0_#e2e8f0]">
-                                <input v-model="step.l0NotesText" class="w-full h-full p-2 text-xs bg-transparent border border-transparent hover:border-slate-200 rounded outline-none text-slate-700 focus:border-blue-400">
-                            </td>
-                            <template v-for="site in websites" :key="site + step.id + 'r2'">
-                                <td class="px-1 py-1 border-r border-slate-200 text-center">
-                                    <button @click="step.data[site].l0_eq = !step.data[site].l0_eq" class="w-full py-0.5 text-xs font-black rounded transition-colors" :class="step.data[site].l0_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
-                                        ?
-                                    </button>
+                            <template v-for="site in websites" :key="site + '-l0'">
+                                <td class="p-1 border-r border-slate-200">
+                                    <select v-model="step.data[site].l0" class="w-full py-1 border border-slate-200 rounded outline-none hover:border-blue-400">
+                                        <option value="" disabled selected></option>
+                                        <option value="✅">✅</option>
+                                        <option value="❌">❌</option>
+                                    </select>
                                 </td>
-                                <td class="px-1 py-1 border-r border-slate-200 text-center">
-                                    <button @click="step.data[site].l1_eq = !step.data[site].l1_eq" class="w-full py-0.5 text-xs font-black rounded transition-colors" :class="step.data[site].l1_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
-                                        ?
-                                    </button>
-                                </td>
-                                <td v-if="showL2" class="px-1 py-1 border-r border-slate-200 text-center">
-                                    <button @click="step.data[site].l2_eq = !step.data[site].l2_eq" class="w-full py-0.5 text-xs font-black rounded transition-colors" :class="step.data[site].l2_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
+                                <td class="p-1 border-r border-slate-200 last:border-r-0 text-center">
+                                    <button @click="step.data[site].l0_eq = !step.data[site].l0_eq" :class="step.data[site].l0_eq ? 'bg-amber-100 text-amber-700 border-amber-300' : 'bg-transparent text-slate-300 hover:text-slate-500 border-transparent'" class="w-full py-1 text-sm font-black rounded border transition-colors">
                                         ?
                                     </button>
                                 </td>
                             </template>
                         </tr>
 
-                        <tr class="uniform-bg border-t border-slate-100">
-                            <td class="p-1 border-r border-slate-200 sticky left-0 z-20 bg-slate-50 text-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                                L1 Note
+                        <tr class="bg-white hover:bg-slate-50 border-b border-slate-200">
+                            <td class="p-2 text-center font-black text-slate-400 border-r border-slate-200">L1</td>
+                            <td class="p-0 border-r border-slate-200">
+                                <input v-model="step.notes.l1" class="w-full h-full p-2 bg-transparent outline-none text-slate-700" placeholder="L1 notes...">
                             </td>
-                            <td class="p-0 border-r border-slate-200 sticky left-12 z-10 bg-white shadow-[1px_0_0_0_#e2e8f0]">
-                                <input v-model="step.l1NotesText" class="w-full h-full p-2 text-xs bg-transparent border border-transparent hover:border-slate-200 rounded outline-none text-slate-700 focus:border-blue-400">
-                            </td>
-                            
-                            <td :colspan="totalDataCols" :rowspan="showL2 ? 2 : 1" class="p-2 border-r border-slate-200 align-top bg-slate-50/50">
-                                <div class="flex items-start h-full">
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-4 shrink-0 mt-2">Explanation</span>
-                                    <textarea v-model="step.explanationText" class="w-full h-full min-h-[3rem] p-2 text-sm bg-white border border-slate-200 rounded outline-none text-slate-700 focus:border-blue-400 resize-none shadow-sm" placeholder="Add overarching explanation or reasoning..."></textarea>
-                                    <button @click="removeStep(jIndex, sIndex)" class="ml-4 mt-1 text-slate-300 hover:text-red-500 shrink-0" title="Delete Step">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            <template v-for="site in websites" :key="site + '-l1'">
+                                <td class="p-1 border-r border-slate-200">
+                                    <select v-model="step.data[site].l1" :class="{'bg-red-50 border-red-300': isErrorL0(step.data[site])}" class="w-full py-1 border border-slate-200 rounded outline-none hover:border-blue-400">
+                                        <option value="" disabled selected></option>
+                                        <option value="✅">✅</option>
+                                        <option value="❌">❌</option>
+                                    </select>
+                                </td>
+                                <td class="p-1 border-r border-slate-200 last:border-r-0 text-center">
+                                    <button @click="step.data[site].l1_eq = !step.data[site].l1_eq" :class="step.data[site].l1_eq ? 'bg-amber-100 text-amber-700 border-amber-300' : 'bg-transparent text-slate-300 hover:text-slate-500 border-transparent'" class="w-full py-1 text-sm font-black rounded border transition-colors">
+                                        ?
                                     </button>
-                                </div>
-                            </td>
+                                </td>
+                            </template>
                         </tr>
 
-                        <tr v-if="showL2" class="uniform-bg border-t border-slate-100">
-                            <td class="p-1 border-r border-slate-200 sticky left-0 z-20 bg-slate-50 text-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                                L2 Note
+                        <tr v-if="showL2" class="bg-white hover:bg-slate-50">
+                            <td class="p-2 text-center font-black text-slate-400 border-r border-slate-200">L2</td>
+                            <td class="p-0 border-r border-slate-200">
+                                <input v-model="step.notes.l2" class="w-full h-full p-2 bg-transparent outline-none text-slate-700" placeholder="L2 notes...">
                             </td>
-                            <td class="p-0 border-r border-slate-200 sticky left-12 z-10 bg-white shadow-[1px_0_0_0_#e2e8f0]">
-                                <input v-model="step.l2NotesText" class="w-full h-full p-2 text-xs bg-transparent border border-transparent hover:border-slate-200 rounded outline-none text-slate-700 focus:border-blue-400">
-                            </td>
-                            </tr>
-
-                    </template>
-                </tbody>
+                            <template v-for="site in websites" :key="site + '-l2'">
+                                <td class="p-1 border-r border-slate-200">
+                                    <select v-model="step.data[site].l2" :class="{'bg-red-50 border-red-300': isErrorL1(step.data[site])}" class="w-full py-1 border border-slate-200 rounded outline-none hover:border-blue-400">
+                                        <option value="" disabled selected></option>
+                                        <option value="✅">✅</option>
+                                        <option value="❌">❌</option>
+                                    </select>
+                                </td>
+                                <td class="p-1 border-r border-slate-200 last:border-r-0 text-center">
+                                    <button @click="step.data[site].l2_eq = !step.data[site].l2_eq" :class="step.data[site].l2_eq ? 'bg-amber-100 text-amber-700 border-amber-300' : 'bg-transparent text-slate-300 hover:text-slate-500 border-transparent'" class="w-full py-1 text-sm font-black rounded border transition-colors">
+                                        ?
+                                    </button>
+                                </td>
+                            </template>
+                        </tr>
+                    </tbody>
+                    <tbody class="h-4"><tr><td colspan="100%"></td></tr></tbody>
+                </template>
             </table>
         </div>
     </div>
 
-    <button @click="addJourney" class="w-full py-6 border-2 border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-blue-600 hover:border-blue-400 hover:bg-white transition-colors uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+    <button @click="addJourney" class="w-full py-6 border-2 border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-blue-600 hover:border-blue-400 hover:bg-white uppercase tracking-wider text-sm flex items-center justify-center gap-2">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
         Add New Journey
     </button>
@@ -206,8 +174,6 @@
 
     createApp({
         setup() {
-            // LOGIN logic removed as per previous flow unless requested, assuming integrated version
-            // Initializing directly for ease of access
             const numWebsites = ref(2);
             const websites = reactive([]);
             const journeys = reactive([]);
@@ -221,6 +187,10 @@
                 return data;
             };
 
+            const generateNotesData = () => {
+                return { l0: '', l1: '', l2: '' };
+            };
+
             const addJourney = () => {
                 journeys.push({
                     id: Date.now(),
@@ -229,10 +199,7 @@
                         { 
                             id: Date.now() + 1, 
                             stepText: '', 
-                            l0NotesText: '',
-                            l1NotesText: '',
-                            l2NotesText: '',
-                            explanationText: '', 
+                            notes: generateNotesData(),
                             data: generateSiteData(websites) 
                         }
                     ]
@@ -243,10 +210,7 @@
                 journeys[jIndex].steps.push({
                     id: Date.now(),
                     stepText: '',
-                    l0NotesText: '',
-                    l1NotesText: '',
-                    l2NotesText: '',
-                    explanationText: '',
+                    notes: generateNotesData(),
                     data: generateSiteData(websites)
                 });
             };
@@ -281,15 +245,9 @@
                 });
                 
                 websites.splice(0, websites.length, ...newWebsites);
-                
                 if (journeys.length === 0) addJourney();
             }, { immediate: true });
 
-            const totalDataCols = computed(() => {
-                return websites.length * (showL2.value ? 3 : 2);
-            });
-
-            // Scoring logic
             const isErrorL0 = (siteData) => {
                 if (siteData.l0 === '' || siteData.l1 === '') return false;
                 if (siteData.l0_eq || siteData.l1_eq) return false; 
@@ -343,7 +301,7 @@
             });
 
             return {
-                numWebsites, websites, journeys, showL2, totalDataCols,
+                numWebsites, websites, journeys, showL2,
                 addJourney, addStep, removeJourney, removeStep, resetAll,
                 isErrorL0, isErrorL1, getL0Score, getL1Score
             };
