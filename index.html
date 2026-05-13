@@ -12,6 +12,9 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         select { -webkit-appearance: none; appearance: none; text-align: center; cursor: pointer; }
+        
+        /* Remove background differences */
+        .uniform-bg { background-color: #ffffff; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans min-h-screen p-4 md:p-8">
@@ -51,13 +54,16 @@
         <div class="bg-slate-800 border border-slate-700 px-6 py-3 rounded-lg shadow-sm flex items-center gap-6 text-white">
             <div class="text-center">
                 <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">L0 Score (vs L1)</div>
-                <div class="text-2xl font-mono font-black text-blue-400">{{ getL0Score }}%</div>
+                <div class="text-2xl font-mono font-black text-blue-400">
+                    {{ getL0Score }}{{ getL0Score !== '--' ? '%' : '' }}
+                </div>
             </div>
             <div class="w-px h-10 bg-slate-600"></div>
             <div class="text-center">
                 <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">L1 Score (vs L2)</div>
                 <div class="text-2xl font-mono font-black" :class="showL2 ? 'text-green-400' : 'text-slate-500'">
-                    {{ showL2 ? getL1Score + '%' : 'N/A' }}
+                    <span v-if="!showL2">N/A</span>
+                    <span v-else>{{ getL1Score }}{{ getL1Score !== '--' ? '%' : '' }}</span>
                 </div>
             </div>
         </div>
@@ -78,44 +84,44 @@
                 <thead>
                     <tr class="bg-slate-100 text-slate-500 uppercase tracking-wider font-semibold text-xs border-b border-slate-200">
                         <th class="p-3 w-72 sticky left-0 z-10 bg-slate-100 border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]">Step</th>
-                        <th v-for="site in websites" :key="site" :colspan="showL2 ? 3 : 2" class="p-3 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-indigo-800">
+                        <th v-for="site in websites" :key="site" :colspan="showL2 ? 3 : 2" class="p-3 text-center border-r border-slate-200 last:border-r-0 bg-slate-100 text-slate-500">
                             {{ site }}
                         </th>
                     </tr>
                     <tr class="bg-white text-slate-400 uppercase tracking-wider font-semibold text-[10px] border-b border-slate-200">
                         <th class="p-2 sticky left-0 z-10 bg-white border-r border-slate-200 shadow-[1px_0_0_0_#e2e8f0]"></th>
                         <template v-for="(site, idx) in websites" :key="site + '-sub'">
-                            <th class="p-2 text-center w-20 border-r border-slate-100">L0</th>
-                            <th :class="['p-2 text-center w-20', showL2 ? 'border-r border-slate-100' : 'border-r border-slate-300']">L1</th>
-                            <th v-if="showL2" class="p-2 text-center w-20 bg-slate-50 border-r border-slate-300">L2</th>
+                            <th class="p-2 text-center w-20 border-r border-slate-200">L0</th>
+                            <th class="p-2 text-center w-20 border-r border-slate-200">L1</th>
+                            <th v-if="showL2" class="p-2 text-center w-20 border-r border-slate-200">L2</th>
                         </template>
                     </tr>
                 </thead>
 
-                <tbody class="divide-y-4 divide-slate-100">
+                <tbody class="divide-y-4 divide-slate-200">
                     <template v-for="(step, sIndex) in journey.steps" :key="step.id">
                         
-                        <tr class="hover:bg-slate-50 group">
-                            <td class="p-2 border-r border-slate-200 sticky left-0 z-10 bg-white group-hover:bg-slate-50 shadow-[1px_0_0_0_#e2e8f0] align-top" rowspan="2">
-                                <textarea v-model="step.stepText" class="w-full h-full min-h-[4rem] p-2 bg-transparent border border-slate-200 rounded text-slate-700 outline-none resize-none focus:border-blue-400" placeholder="Describe step..."></textarea>
+                        <tr class="uniform-bg">
+                            <td rowspan="3" class="p-2 border-r border-slate-200 sticky left-0 z-10 bg-white shadow-[1px_0_0_0_#e2e8f0] align-top">
+                                <textarea v-model="step.stepText" class="w-full h-full min-h-[6rem] p-2 bg-transparent border border-transparent hover:border-slate-200 rounded text-slate-700 outline-none resize-none focus:border-blue-400"></textarea>
                             </td>
                             
                             <template v-for="site in websites" :key="site + step.id + 'r1'">
-                                <td class="p-1 border-r border-slate-100">
+                                <td class="p-1 border-r border-slate-200">
                                     <select v-model="step.data[site].l0" class="w-full h-8 border border-slate-200 rounded bg-white text-lg outline-none hover:border-blue-400">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td :class="['p-1', showL2 ? 'border-r border-slate-100' : 'border-r border-slate-300']">
+                                <td class="p-1 border-r border-slate-200">
                                     <select v-model="step.data[site].l1" class="w-full h-8 border border-slate-200 rounded bg-white text-lg outline-none hover:border-blue-400" :class="{'bg-red-50 border-red-300': isErrorL0(step.data[site])}">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td v-if="showL2" class="p-1 bg-slate-50 border-r border-slate-300">
+                                <td v-if="showL2" class="p-1 border-r border-slate-200">
                                     <select v-model="step.data[site].l2" class="w-full h-8 border border-slate-200 rounded bg-white text-lg outline-none hover:border-blue-400" :class="{'bg-red-50 border-red-300': isErrorL1(step.data[site])}">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
@@ -125,23 +131,32 @@
                             </template>
                         </tr>
 
-                        <tr class="bg-slate-50 border-b border-slate-200">
+                        <tr class="uniform-bg border-b border-slate-100">
                             <template v-for="site in websites" :key="site + step.id + 'r2'">
-                                <td :colspan="showL2 ? 3 : 2" class="p-1 border-r border-slate-300">
-                                    <label class="flex items-center justify-center w-full bg-white border border-slate-200 rounded py-1 cursor-pointer hover:bg-slate-100 transition-colors shadow-sm" :class="{'bg-amber-50 border-amber-300': step.data[site].statusQuestion}">
-                                        <input type="checkbox" v-model="step.data[site].statusQuestion" class="mr-2 w-4 h-4 rounded text-amber-500 focus:ring-amber-500 cursor-pointer">
-                                        <span class="text-xs font-bold" :class="step.data[site].statusQuestion ? 'text-amber-700' : 'text-slate-500'">? (Equivocal)</span>
-                                    </label>
+                                <td class="p-1 border-r border-slate-200 text-center">
+                                    <button @click="step.data[site].l0_eq = !step.data[site].l0_eq" class="w-full py-1 text-sm font-black rounded transition-colors" :class="step.data[site].l0_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
+                                        ?
+                                    </button>
+                                </td>
+                                <td class="p-1 border-r border-slate-200 text-center">
+                                    <button @click="step.data[site].l1_eq = !step.data[site].l1_eq" class="w-full py-1 text-sm font-black rounded transition-colors" :class="step.data[site].l1_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
+                                        ?
+                                    </button>
+                                </td>
+                                <td v-if="showL2" class="p-1 border-r border-slate-200 text-center">
+                                    <button @click="step.data[site].l2_eq = !step.data[site].l2_eq" class="w-full py-1 text-sm font-black rounded transition-colors" :class="step.data[site].l2_eq ? 'bg-slate-200 text-slate-800' : 'bg-transparent text-transparent hover:bg-slate-100'">
+                                        ?
+                                    </button>
                                 </td>
                             </template>
                         </tr>
 
-                        <tr class="bg-slate-100 border-b-4 border-white">
-                            <td :colspan="totalColumns" class="p-2 border-l-4 border-indigo-300">
+                        <tr class="uniform-bg">
+                            <td :colspan="totalDataCols" class="p-2 border-r border-slate-200">
                                 <div class="flex items-center">
-                                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mr-4 w-24 shrink-0 text-right">Explanation</span>
-                                    <input v-model="step.explanationText" class="w-full p-2 text-sm bg-white border border-slate-200 rounded outline-none text-slate-700 focus:border-indigo-400" placeholder="Add explanation or reasoning for this step...">
-                                    <button @click="removeStep(jIndex, sIndex)" class="ml-4 text-slate-300 hover:text-red-500" title="Delete Step">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-4 shrink-0">Explanation</span>
+                                    <input v-model="step.explanationText" class="w-full p-2 text-sm bg-transparent border border-transparent hover:border-slate-200 rounded outline-none text-slate-700 focus:border-blue-400">
+                                    <button @click="removeStep(jIndex, sIndex)" class="ml-4 text-slate-300 hover:text-red-500 shrink-0" title="Delete Step">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                 </div>
@@ -154,7 +169,7 @@
         </div>
     </div>
 
-    <button @click="addJourney" class="w-full py-6 border-2 border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-blue-600 hover:border-blue-400 hover:bg-slate-50 transition-colors uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+    <button @click="addJourney" class="w-full py-6 border-2 border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-blue-600 hover:border-blue-400 hover:bg-white transition-colors uppercase tracking-wider text-sm flex items-center justify-center gap-2">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
         Add New Journey
     </button>
@@ -166,16 +181,15 @@
 
     createApp({
         setup() {
-            const numWebsites = ref(2); // Default to 2 websites
+            const numWebsites = ref(2);
             const websites = reactive([]);
             const journeys = reactive([]);
             const showL2 = ref(true);
 
-            // Generate initial journey
             const generateSiteData = (siteList) => {
                 const data = {};
                 siteList.forEach(site => {
-                    data[site] = { l0: '', l1: '', l2: '', statusQuestion: false };
+                    data[site] = { l0: '', l1: '', l2: '', l0_eq: false, l1_eq: false, l2_eq: false };
                 });
                 return data;
             };
@@ -211,7 +225,6 @@
                 if(confirm("DANGER: Wipe all data and reset?")) location.reload();
             };
 
-            // Watcher to dynamically update website columns based on input
             watch(numWebsites, (newVal) => {
                 const count = Math.min(Math.max(parseInt(newVal) || 1, 1), 26);
                 const newWebsites = [];
@@ -219,12 +232,11 @@
                     newWebsites.push('W' + String.fromCharCode(65 + i));
                 }
                 
-                // Ensure existing steps have data objects for new websites
                 journeys.forEach(j => {
                     j.steps.forEach(s => {
                         newWebsites.forEach(site => {
                             if (!s.data[site]) {
-                                s.data[site] = { l0: '', l1: '', l2: '', statusQuestion: false };
+                                s.data[site] = { l0: '', l1: '', l2: '', l0_eq: false, l1_eq: false, l2_eq: false };
                             }
                         });
                     });
@@ -232,64 +244,74 @@
                 
                 websites.splice(0, websites.length, ...newWebsites);
                 
-                // Initialize if empty
                 if (journeys.length === 0) addJourney();
             }, { immediate: true });
 
-            // Total columns calculation for the Explanation row colspan
-            const totalColumns = computed(() => {
-                return 1 + (websites.length * (showL2.value ? 3 : 2));
+            const totalDataCols = computed(() => {
+                return websites.length * (showL2.value ? 3 : 2);
             });
 
-            // Scoring Logic: Deduct ONLY IF NOT Equivocal (?) AND Both cols filled AND cols mismatch
+            // If either column is incomplete, do not penalize yet
+            // If either column is marked '?' equivocal, no deduction
+            // Otherwise deduct if they don't match
             const isErrorL0 = (siteData) => {
-                if (siteData.statusQuestion) return false;
                 if (siteData.l0 === '' || siteData.l1 === '') return false;
+                if (siteData.l0_eq || siteData.l1_eq) return false; 
                 return siteData.l0 !== siteData.l1;
             };
 
             const isErrorL1 = (siteData) => {
-                if (siteData.statusQuestion) return false;
                 if (siteData.l1 === '' || siteData.l2 === '') return false;
+                if (siteData.l1_eq || siteData.l2_eq) return false; 
                 return siteData.l1 !== siteData.l2;
             };
 
+            // Calculate L0 Score (vs L1)
             const getL0Score = computed(() => {
-                let totalChecks = 0;
+                let validChecks = 0;
                 let errors = 0;
 
                 journeys.forEach(j => {
-                    totalChecks += j.steps.length * websites.length;
                     j.steps.forEach(s => {
                         websites.forEach(site => {
-                            if (s.data[site] && isErrorL0(s.data[site])) errors++;
+                            const d = s.data[site];
+                            // Check is valid only when both fields have an input
+                            if (d && d.l0 !== '' && d.l1 !== '') {
+                                validChecks++;
+                                if (isErrorL0(d)) errors++;
+                            }
                         });
                     });
                 });
 
-                if (totalChecks === 0) return 0;
-                return (((totalChecks - errors) / totalChecks) * 100).toFixed(1);
+                if (validChecks === 0) return '--';
+                return (((validChecks - errors) / validChecks) * 100).toFixed(1);
             });
 
+            // Calculate L1 Score (vs L2)
             const getL1Score = computed(() => {
-                let totalChecks = 0;
+                let validChecks = 0;
                 let errors = 0;
 
                 journeys.forEach(j => {
-                    totalChecks += j.steps.length * websites.length;
                     j.steps.forEach(s => {
                         websites.forEach(site => {
-                            if (s.data[site] && isErrorL1(s.data[site])) errors++;
+                            const d = s.data[site];
+                            // Check is valid only when both fields have an input
+                            if (d && d.l1 !== '' && d.l2 !== '') {
+                                validChecks++;
+                                if (isErrorL1(d)) errors++;
+                            }
                         });
                     });
                 });
 
-                if (totalChecks === 0) return 0;
-                return (((totalChecks - errors) / totalChecks) * 100).toFixed(1);
+                if (validChecks === 0) return '--';
+                return (((validChecks - errors) / validChecks) * 100).toFixed(1);
             });
 
             return {
-                numWebsites, websites, journeys, showL2, totalColumns,
+                numWebsites, websites, journeys, showL2, totalDataCols,
                 addJourney, addStep, removeJourney, removeStep, resetAll,
                 isErrorL0, isErrorL1, getL0Score, getL1Score
             };
