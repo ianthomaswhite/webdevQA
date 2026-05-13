@@ -15,36 +15,17 @@
         .list-enter-active, .list-leave-active { transition: all 0.3s ease; }
         .list-enter-from, .list-leave-to { opacity: 0; transform: translateY(10px); }
         .list-move { transition: transform 0.3s ease; }
-        .uniform-bg { background-color: #ffffff; }
     </style>
 </head>
 <body class="bg-white text-slate-900 font-sans min-h-screen p-4 md:p-8">
 
 <div id="app" class="max-w-[1600px] mx-auto space-y-8">
 
-    <header class="bg-white p-6 rounded-xl border border-slate-200 flex flex-col gap-6">
+    <header class="bg-white flex flex-col gap-6 mb-8">
         <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6">
             <div class="max-w-3xl">
                 <h1 class="text-3xl font-bold text-slate-800 tracking-tight">Audit Dashboard</h1>
-                <p class="text-slate-500 mt-1 mb-4">Journey steps & Axis ranking alignment</p>
-                
-                <div class="text-xs text-slate-600 bg-white p-3 rounded border border-slate-200 leading-relaxed grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <strong class="text-slate-800">Old:</strong><br>
-                        <em>Journey:</em> 1 deduction per website per journey with any diff.<br>
-                        <em>Axis:</em> Starts at 7. Deducts for changes >1 (or exactly 1-2 & 6-7). Floor of 1.
-                    </div>
-                    <div>
-                        <strong class="text-slate-800">New 1:</strong><br>
-                        <em>Journey:</em> Deducts for any pass/fail diff.<br>
-                        <em>Axis:</em> Deducts for every rating difference & relative ranking flip.
-                    </div>
-                    <div>
-                        <strong class="text-slate-800">New 2:</strong><br>
-                        <em>Journey:</em> Waives deduction if target is "?".<br>
-                        <em>Axis:</em> Waives rank deductions if mathematically forced or explicitly tied (=).
-                    </div>
-                </div>
+                <p class="text-slate-500 mt-1">Journey steps & Axis ranking alignment</p>
             </div>
             
             <div class="flex flex-wrap items-center gap-4 shrink-0">
@@ -69,12 +50,12 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 overflow-x-auto pb-2">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
             
-            <div class="bg-white border border-slate-200 p-5 rounded-xl flex flex-col justify-between min-w-max">
+            <div class="bg-slate-50 border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col h-full">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Journey Score</div>
                 
-                <div class="flex gap-6 w-full justify-center mb-6">
+                <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
                         
@@ -128,17 +109,17 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left mt-auto pt-4 border-t border-slate-200 leading-relaxed">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-hidden">
                     <strong class="text-slate-800">Old:</strong> One deduction per website per journey if any steps differ, regardless of how many steps differ.<br>
                     <strong class="text-slate-800">New 1 (Strict):</strong> Deducts exactly one point for every individual step that contains a pass/fail difference between levels.<br>
                     <strong class="text-slate-800">New 2 (Lenient):</strong> The same as New 1 except it waives the deduction if the target level is explicitly marked "?".
                 </div>
             </div>
 
-            <div class="bg-white border border-slate-200 p-5 rounded-xl flex flex-col justify-between min-w-[320px]">
+            <div class="bg-slate-50 border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col h-full">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Axis Score</div>
                 
-                <div class="flex gap-6 w-full justify-center mb-6">
+                <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
                         
@@ -192,17 +173,17 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left mt-auto pt-4 border-t border-slate-200 leading-relaxed">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-hidden">
                     <strong class="text-slate-800">Old:</strong> Starts at 7 globally. Deducts per category based on changes >1 (or exactly 1-2/6-7): 1-2 changes = 1 deduction, 3+ changes = 2 deductions. Floor of 1.<br>
                     <strong class="text-slate-800">New 1 (Strict):</strong> Deducts exactly one point for every unit of absolute rating difference between levels. Additionally, deducts exactly one point for every relative ranking flip between any pair of websites.<br>
                     <strong class="text-slate-800">New 2 (Lenient):</strong> The same as New 1 except ranking flip deductions are waived if the flip was mathematically forced by the new ratings or if the websites are tied ("=").
                 </div>
             </div>
 
-            <div class="bg-white border border-slate-200 p-5 rounded-xl flex flex-col justify-between min-w-[320px]">
+            <div class="bg-slate-50 border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col h-full">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Total Combined Score</div>
                 
-                <div class="flex gap-6 w-full justify-center mb-6">
+                <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
                         
@@ -256,7 +237,7 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left mt-auto pt-4 border-t border-slate-200 leading-relaxed">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-hidden">
                     <strong class="text-slate-800">Old:</strong> The Journey score out of 7 minus the total global Axis deductions. Floor of 1.<br>
                     <strong class="text-slate-800">New 1 & 2:</strong> The aggregated sum of the Journey score numerator and Axis score numerator, divided by the aggregated sum of their respective denominators.
                 </div>
@@ -271,8 +252,8 @@
         <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">Journey Audit</h2>
     </div>
 
-    <div v-for="(journey, jIndex) in journeys" :key="journey.id" class="bg-white rounded-xl border border-slate-200 overflow-hidden mb-8">
-        <div class="px-6 py-4 bg-white border-b border-slate-200 flex justify-between items-center">
+    <div v-for="(journey, jIndex) in journeys" :key="journey.id" class="bg-white mb-10">
+        <div class="py-4 bg-white border-b border-slate-200 flex justify-between items-center">
             <input v-model="journey.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 w-1/2" placeholder="Journey Name">
             <div class="flex gap-2">
                 <button @click="addStep(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-blue-600 border border-blue-200 rounded hover:bg-blue-50">+ Add Step</button>
@@ -280,11 +261,11 @@
             </div>
         </div>
 
-        <div class="overflow-x-auto p-4">
+        <div class="overflow-x-auto py-4">
             <table class="w-full text-left text-sm whitespace-nowrap border-collapse">
                 <template v-for="(step, sIndex) in journey.steps" :key="step.id">
                     <tbody class="border border-slate-200">
-                        <tr class="bg-white text-slate-800 border-b border-slate-200">
+                        <tr class="bg-slate-50 text-slate-800 border-b border-slate-200">
                             <td class="p-1 w-8 text-center font-black text-sm border-r border-slate-200">{{ sIndex + 1 }}</td>
                             <td class="p-0 w-[32rem] min-w-[32rem] border-r border-slate-200">
                                 <textarea v-model="step.stepText" class="w-full h-16 p-2 bg-transparent outline-none resize-none overflow-y-auto font-semibold text-sm leading-tight"></textarea>
@@ -388,14 +369,14 @@
         <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">Axis Audit</h2>
     </div>
 
-    <div v-for="(cat, cIndex) in categories" :key="cat.id" class="bg-white rounded-xl border border-slate-200 overflow-hidden mb-8">
-        <div class="px-6 py-4 bg-white border-b border-slate-200 flex justify-between items-center">
+    <div v-for="(cat, cIndex) in categories" :key="cat.id" class="bg-white mb-10">
+        <div class="py-4 bg-white border-b border-slate-200 flex justify-between items-center">
             <input v-model="cat.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 placeholder-slate-400 w-1/2" placeholder="Category Name...">
             <button @click="removeCategory(cIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-red-500 border border-red-200 rounded hover:bg-red-50 transition-colors shadow-sm">Delete Category</button>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
-            <div v-for="level in ['l0', 'l1', 'l2']" :key="level" class="p-4 bg-white flex flex-col h-full" v-show="level !== 'l2' || showL2">
+        <div class="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 pt-4">
+            <div v-for="level in ['l0', 'l1', 'l2']" :key="level" class="px-4 bg-white flex flex-col h-full" v-show="level !== 'l2' || showL2">
                 <div class="mb-4 pb-2 border-b border-slate-100 flex justify-between items-center">
                     <h3 class="font-black text-slate-400 uppercase tracking-widest text-sm">{{ level.toUpperCase() }}</h3>
                 </div>
@@ -404,7 +385,7 @@
                     <transition-group name="list">
                         <div v-for="(item, iIndex) in cat[level].ranking" :key="item.site">
 
-                            <div class="flex items-center bg-white border border-slate-200 rounded-lg p-2 relative z-0 transition-all hover:border-indigo-300">
+                            <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg p-2 relative z-0 transition-all hover:border-indigo-300">
                                 
                                 <div class="flex flex-col items-center justify-center shrink-0 w-6 text-slate-400">
                                     <button 
