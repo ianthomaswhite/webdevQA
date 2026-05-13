@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-track { background: #ffffff; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         select { -webkit-appearance: none; appearance: none; text-align: center; cursor: pointer; }
@@ -18,19 +18,37 @@
         .uniform-bg { background-color: #ffffff; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans min-h-screen p-4 md:p-8">
+<body class="bg-white text-slate-900 font-sans min-h-screen p-4 md:p-8">
 
 <div id="app" class="max-w-[1600px] mx-auto space-y-8">
 
-    <header class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col gap-6">
-        <div class="flex flex-col items-start gap-4">
-            <div>
+    <header class="bg-white p-6 rounded-xl border border-slate-200 flex flex-col gap-6">
+        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6">
+            <div class="max-w-3xl">
                 <h1 class="text-3xl font-bold text-slate-800 tracking-tight">Audit Dashboard</h1>
-                <p class="text-slate-500 mt-1">Journey steps & Axis ranking alignment</p>
+                <p class="text-slate-500 mt-1 mb-4">Journey steps & Axis ranking alignment</p>
+                
+                <div class="text-xs text-slate-600 bg-white p-3 rounded border border-slate-200 leading-relaxed grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <strong class="text-slate-800">Old:</strong><br>
+                        <em>Journey:</em> 1 deduction per website per journey with any diff.<br>
+                        <em>Axis:</em> Starts at 7. Deducts for changes >1 (or exactly 1-2 & 6-7). Floor of 1.
+                    </div>
+                    <div>
+                        <strong class="text-slate-800">New 1:</strong><br>
+                        <em>Journey:</em> Deducts for any pass/fail diff.<br>
+                        <em>Axis:</em> Deducts for every rating difference & relative ranking flip.
+                    </div>
+                    <div>
+                        <strong class="text-slate-800">New 2:</strong><br>
+                        <em>Journey:</em> Waives deduction if target is "?".<br>
+                        <em>Axis:</em> Waives rank deductions if mathematically forced or explicitly tied (=).
+                    </div>
+                </div>
             </div>
             
-            <div class="flex flex-wrap items-center gap-4">
-                <div class="flex items-center gap-3 bg-slate-50 p-2 rounded border border-slate-200">
+            <div class="flex flex-wrap items-center gap-4 shrink-0">
+                <div class="flex items-center gap-3 bg-white p-2 rounded border border-slate-200">
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Websites:</label>
                     <input 
                         type="number" 
@@ -41,11 +59,11 @@
                     >
                 </div>
                 
-                <button @click="showL2 = !showL2" :class="['px-4 py-2 rounded text-xs font-bold uppercase tracking-wider border transition-colors', showL2 ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-slate-100 text-slate-500 border-slate-200']">
+                <button @click="showL2 = !showL2" :class="['px-4 py-2 rounded text-xs font-bold uppercase tracking-wider border transition-colors', showL2 ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-white text-slate-500 border-slate-200']">
                     {{ showL2 ? 'Hide L2' : 'Show L2' }}
                 </button>
                 
-                <button @click="resetAll" class="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 px-4 py-2 rounded border border-red-100 transition-colors uppercase tracking-wider">
+                <button @click="resetAll" class="text-xs font-bold text-red-500 hover:text-red-700 bg-white px-4 py-2 rounded border border-red-200 transition-colors uppercase tracking-wider">
                     Reset
                 </button>
             </div>
@@ -53,7 +71,7 @@
 
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 overflow-x-auto pb-2">
             
-            <div class="bg-white border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col justify-between min-w-[320px]">
+            <div class="bg-white border border-slate-200 p-5 rounded-xl flex flex-col justify-between min-w-max">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Journey Score</div>
                 
                 <div class="flex gap-6 w-full justify-center mb-6">
@@ -117,7 +135,7 @@
                 </div>
             </div>
 
-            <div class="bg-white border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col justify-between min-w-[320px]">
+            <div class="bg-white border border-slate-200 p-5 rounded-xl flex flex-col justify-between min-w-[320px]">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Axis Score</div>
                 
                 <div class="flex gap-6 w-full justify-center mb-6">
@@ -181,7 +199,7 @@
                 </div>
             </div>
 
-            <div class="bg-slate-50 border border-slate-200 shadow-inner p-5 rounded-xl flex flex-col justify-between min-w-[320px]">
+            <div class="bg-white border border-slate-200 p-5 rounded-xl flex flex-col justify-between min-w-[320px]">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Total Combined Score</div>
                 
                 <div class="flex gap-6 w-full justify-center mb-6">
@@ -247,14 +265,14 @@
         </div>
     </header>
 
-    <div class="w-full h-px bg-slate-300 my-8"></div>
+    <div class="w-full h-px bg-slate-200 my-8"></div>
 
     <div class="mb-4">
         <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">Journey Audit</h2>
     </div>
 
-    <div v-for="(journey, jIndex) in journeys" :key="journey.id" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
-        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+    <div v-for="(journey, jIndex) in journeys" :key="journey.id" class="bg-white rounded-xl border border-slate-200 overflow-hidden mb-8">
+        <div class="px-6 py-4 bg-white border-b border-slate-200 flex justify-between items-center">
             <input v-model="journey.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 w-1/2" placeholder="Journey Name">
             <div class="flex gap-2">
                 <button @click="addStep(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-blue-600 border border-blue-200 rounded hover:bg-blue-50">+ Add Step</button>
@@ -265,8 +283,8 @@
         <div class="overflow-x-auto p-4">
             <table class="w-full text-left text-sm whitespace-nowrap border-collapse">
                 <template v-for="(step, sIndex) in journey.steps" :key="step.id">
-                    <tbody class="border-[2px] border-slate-200">
-                        <tr class="bg-slate-100 text-slate-800 border-b border-slate-200">
+                    <tbody class="border border-slate-200">
+                        <tr class="bg-white text-slate-800 border-b border-slate-200">
                             <td class="p-1 w-8 text-center font-black text-sm border-r border-slate-200">{{ sIndex + 1 }}</td>
                             <td class="p-0 w-[32rem] min-w-[32rem] border-r border-slate-200">
                                 <textarea v-model="step.stepText" class="w-full h-16 p-2 bg-transparent outline-none resize-none overflow-y-auto font-semibold text-sm leading-tight"></textarea>
@@ -274,14 +292,14 @@
                             <template v-for="site in websites" :key="site">
                                 <td colspan="2" class="p-1 text-center font-bold text-sm border-r border-slate-200">{{ site }}</td>
                             </template>
-                            <td :rowspan="showL2 ? 5 : 4" class="w-10 bg-slate-50 align-middle text-center">
+                            <td :rowspan="showL2 ? 5 : 4" class="w-10 bg-white align-middle text-center">
                                 <button @click="removeStep(jIndex, sIndex)" class="text-slate-400 hover:text-red-600" title="Delete Step">
                                     <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </td>
                         </tr>
 
-                        <tr class="bg-slate-50 text-slate-500 text-[10px] uppercase font-bold tracking-wider border-b border-slate-200">
+                        <tr class="bg-white text-slate-500 text-[10px] uppercase font-bold tracking-wider border-b border-slate-200">
                             <td class="p-1 text-center border-r border-slate-200">Level</td>
                             <td class="p-1 text-center border-r border-slate-200">Notes</td>
                             <template v-for="site in websites" :key="site + '-sub'">
@@ -290,88 +308,88 @@
                             </template>
                         </tr>
 
-                        <tr class="bg-white hover:bg-slate-50 border-b border-slate-100">
+                        <tr class="bg-white border-b border-slate-200">
                             <td class="p-1 text-center font-black text-slate-400 border-r border-slate-200 text-xs">L0</td>
                             <td class="p-0 border-r border-slate-200 w-[32rem] min-w-[32rem]">
                                 <textarea v-model="step.notes.l0" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight"></textarea>
                             </td>
                             <template v-for="site in websites" :key="site + '-l0'">
                                 <td class="p-0 border-r border-slate-200 w-12">
-                                    <select v-model="step.data[site].l0" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-100 focus:bg-white text-center">
+                                    <select v-model="step.data[site].l0" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-50 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td class="p-0 border-r border-slate-200 text-center w-8 bg-slate-50/30">
-                                    <button @click="step.data[site].l0_eq = !step.data[site].l0_eq" :class="step.data[site].l0_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-100'" class="w-full h-12 text-sm transition-colors">
+                                <td class="p-0 border-r border-slate-200 text-center w-8">
+                                    <button @click="step.data[site].l0_eq = !step.data[site].l0_eq" :class="step.data[site].l0_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-50'" class="w-full h-12 text-sm transition-colors">
                                         ?
                                     </button>
                                 </td>
                             </template>
                         </tr>
 
-                        <tr class="bg-white hover:bg-slate-50 border-b border-slate-100">
+                        <tr class="bg-white border-b border-slate-200">
                             <td class="p-1 text-center font-black text-slate-400 border-r border-slate-200 text-xs">L1</td>
                             <td class="p-0 border-r border-slate-200 w-[32rem] min-w-[32rem]">
                                 <textarea v-model="step.notes.l1" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight"></textarea>
                             </td>
                             <template v-for="site in websites" :key="site + '-l1'">
                                 <td class="p-0 border-r border-slate-200 w-12">
-                                    <select v-model="step.data[site].l1" :class="{'bg-red-50 text-red-700': isLenientErrorJourneyL0(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-100 focus:bg-white text-center">
+                                    <select v-model="step.data[site].l1" :class="{'bg-red-50 text-red-700': isLenientErrorJourneyL0(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-50 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td class="p-0 border-r border-slate-200 text-center w-8 bg-slate-50/30">
-                                    <button @click="step.data[site].l1_eq = !step.data[site].l1_eq" :class="step.data[site].l1_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-100'" class="w-full h-12 text-sm transition-colors">
+                                <td class="p-0 border-r border-slate-200 text-center w-8">
+                                    <button @click="step.data[site].l1_eq = !step.data[site].l1_eq" :class="step.data[site].l1_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-50'" class="w-full h-12 text-sm transition-colors">
                                         ?
                                     </button>
                                 </td>
                             </template>
                         </tr>
 
-                        <tr v-if="showL2" class="bg-white hover:bg-slate-50">
+                        <tr v-if="showL2" class="bg-white">
                             <td class="p-1 text-center font-black text-slate-400 border-r border-slate-200 text-xs">L2</td>
                             <td class="p-0 border-r border-slate-200 w-[32rem] min-w-[32rem]">
                                 <textarea v-model="step.notes.l2" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight"></textarea>
                             </td>
                             <template v-for="site in websites" :key="site + '-l2'">
                                 <td class="p-0 border-r border-slate-200 w-12">
-                                    <select v-model="step.data[site].l2" :class="{'bg-red-50 text-red-700': isLenientErrorJourneyL1(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-100 focus:bg-white text-center">
+                                    <select v-model="step.data[site].l2" :class="{'bg-red-50 text-red-700': isLenientErrorJourneyL1(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-50 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td class="p-0 border-r border-slate-200 text-center w-8 bg-slate-50/30">
-                                    <button @click="step.data[site].l2_eq = !step.data[site].l2_eq" :class="step.data[site].l2_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-100'" class="w-full h-12 text-sm transition-colors">
+                                <td class="p-0 border-r border-slate-200 text-center w-8">
+                                    <button @click="step.data[site].l2_eq = !step.data[site].l2_eq" :class="step.data[site].l2_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-50'" class="w-full h-12 text-sm transition-colors">
                                         ?
                                     </button>
                                 </td>
                             </template>
                         </tr>
                     </tbody>
-                    <tbody class="h-3"><tr><td colspan="100%"></td></tr></tbody>
+                    <tbody class="h-4"><tr><td colspan="100%"></td></tr></tbody>
                 </template>
             </table>
         </div>
     </div>
     
-    <button @click="addJourney" class="w-full py-4 border-2 border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-blue-600 hover:border-blue-400 hover:bg-white uppercase tracking-wider text-sm flex items-center justify-center gap-2 mb-12">
+    <button @click="addJourney" class="w-full py-4 border border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-blue-600 hover:border-blue-400 hover:bg-white uppercase tracking-wider text-sm flex items-center justify-center gap-2 mb-12">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
         Add New Journey
     </button>
 
-    <div class="w-full h-px bg-slate-300 my-8"></div>
+    <div class="w-full h-px bg-slate-200 my-8"></div>
 
     <div class="mb-4">
         <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">Axis Audit</h2>
     </div>
 
-    <div v-for="(cat, cIndex) in categories" :key="cat.id" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
-        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+    <div v-for="(cat, cIndex) in categories" :key="cat.id" class="bg-white rounded-xl border border-slate-200 overflow-hidden mb-8">
+        <div class="px-6 py-4 bg-white border-b border-slate-200 flex justify-between items-center">
             <input v-model="cat.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 placeholder-slate-400 w-1/2" placeholder="Category Name...">
             <button @click="removeCategory(cIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-red-500 border border-red-200 rounded hover:bg-red-50 transition-colors shadow-sm">Delete Category</button>
         </div>
@@ -386,7 +404,7 @@
                     <transition-group name="list">
                         <div v-for="(item, iIndex) in cat[level].ranking" :key="item.site">
 
-                            <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg p-2 shadow-sm relative z-0 transition-all hover:border-indigo-300">
+                            <div class="flex items-center bg-white border border-slate-200 rounded-lg p-2 relative z-0 transition-all hover:border-indigo-300">
                                 
                                 <div class="flex flex-col items-center justify-center shrink-0 w-6 text-slate-400">
                                     <button 
@@ -412,7 +430,7 @@
                                 <button 
                                     v-if="iIndex > 0 && item.rating !== '' && item.rating === cat[level].ranking[iIndex-1].rating"
                                     @click="item.tieWithAbove = !item.tieWithAbove" 
-                                    class="w-6 h-6 shrink-0 rounded border bg-white flex items-center justify-center text-xs font-black shadow-sm transition-colors mr-2"
+                                    class="w-6 h-6 shrink-0 rounded border bg-white flex items-center justify-center text-xs font-black transition-colors mr-2"
                                     :class="item.tieWithAbove ? 'border-indigo-400 text-indigo-600 bg-indigo-50' : 'border-slate-200 text-slate-300 hover:text-slate-500 hover:border-slate-300'"
                                     title="Toggle Tie"
                                 >
@@ -420,7 +438,7 @@
                                 </button>
                                 <div v-else class="w-6 h-6 shrink-0 mr-2"></div>
                                 
-                                <div class="flex items-center bg-white border border-slate-200 rounded shrink-0 px-2 shadow-sm">
+                                <div class="flex items-center bg-white border border-slate-200 rounded shrink-0 px-2">
                                     <select 
                                         v-model="item.rating" 
                                         @change="forceSort(cIndex, level)"
@@ -438,13 +456,13 @@
 
                 <div class="mt-auto">
                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Notes</span>
-                    <textarea v-model="cat[level].notes" class="w-full h-24 p-3 bg-slate-50 border border-slate-200 focus:border-indigo-400 rounded-lg outline-none text-sm text-slate-700 resize-none overflow-y-auto"></textarea>
+                    <textarea v-model="cat[level].notes" class="w-full h-24 p-3 bg-white border border-slate-200 focus:border-indigo-400 rounded-lg outline-none text-sm text-slate-700 resize-none overflow-y-auto"></textarea>
                 </div>
             </div>
         </div>
     </div>
 
-    <button @click="addCategory" class="w-full py-6 border-2 border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-indigo-600 hover:border-indigo-400 hover:bg-white uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-colors">
+    <button @click="addCategory" class="w-full py-4 border border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-indigo-600 hover:border-indigo-400 hover:bg-white uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
         Add New Category
     </button>
@@ -657,7 +675,6 @@
                         strictCatScore -= diff;
                         entailCatScore -= diff;
 
-                        // Original Logic Qualifiers
                         if (diff > 1) {
                             origCatChanges++;
                         } else if (diff === 1) {
@@ -687,7 +704,6 @@
                     strictNumerator += strictCatScore;
                     entailNumerator += entailCatScore;
 
-                    // Apply Original Category Deductions
                     if (origCatChanges >= 3) {
                         origDeductions += 2;
                     } else if (origCatChanges >= 1) {
