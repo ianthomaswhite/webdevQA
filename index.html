@@ -24,7 +24,7 @@
     <header class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col lg:flex-row justify-between items-center gap-6">
         <div>
             <h1 class="text-3xl font-bold text-slate-800 tracking-tight">Axis Ranking Audit</h1>
-            <p class="text-slate-500 mt-1">Category rating & ranking alignment (L0 vs L1 vs L2)</p>
+            <p class="text-slate-500 mt-1">Category rating & ranking alignment</p>
         </div>
         
         <div class="flex flex-wrap items-center gap-6">
@@ -45,17 +45,41 @@
         </div>
 
         <div class="bg-slate-800 border border-slate-700 px-6 py-3 rounded-lg shadow-sm flex items-center gap-6 text-white">
-            <div class="text-center">
-                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">L0 Score</div>
-                <div class="text-2xl font-mono font-black text-indigo-400">
-                    {{ getL0Score }}{{ getL0Score !== '--' ? '%' : '' }}
+            <div class="flex flex-col">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 text-center">L0 Score (vs L1)</div>
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <div class="text-[9px] text-slate-500 uppercase font-bold">Strict</div>
+                        <div class="text-xl font-mono font-black text-indigo-400">
+                            {{ getL0Score.strict }}{{ getL0Score.strict !== '--' ? '%' : '' }}
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-[9px] text-slate-500 uppercase font-bold">Entailed</div>
+                        <div class="text-xl font-mono font-black text-indigo-300">
+                            {{ getL0Score.entail }}{{ getL0Score.entail !== '--' ? '%' : '' }}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="w-px h-10 bg-slate-600"></div>
-            <div class="text-center">
-                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">L1 Score</div>
-                <div class="text-2xl font-mono font-black text-emerald-400">
-                    {{ getL1Score }}{{ getL1Score !== '--' ? '%' : '' }}
+            
+            <div class="w-px h-12 bg-slate-600"></div>
+            
+            <div class="flex flex-col">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 text-center">L1 Score (vs L2)</div>
+                <div class="flex gap-4">
+                    <div class="text-center">
+                        <div class="text-[9px] text-slate-500 uppercase font-bold">Strict</div>
+                        <div class="text-xl font-mono font-black text-emerald-400">
+                            {{ getL1Score.strict }}{{ getL1Score.strict !== '--' ? '%' : '' }}
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-[9px] text-slate-500 uppercase font-bold">Entailed</div>
+                        <div class="text-xl font-mono font-black text-emerald-300">
+                            {{ getL1Score.entail }}{{ getL1Score.entail !== '--' ? '%' : '' }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -75,20 +99,9 @@
                     <h3 class="font-black text-slate-400 uppercase tracking-widest text-sm">{{ level.toUpperCase() }}</h3>
                 </div>
 
-                <div class="flex-grow space-y-1 mb-6 relative">
+                <div class="flex-grow space-y-2 mb-6 relative">
                     <transition-group name="list">
                         <div v-for="(item, iIndex) in cat[level].ranking" :key="item.site">
-                            
-                            <div v-if="iIndex > 0 && item.rating === cat[level].ranking[iIndex-1].rating" class="flex justify-center -my-1 relative z-10">
-                                <button 
-                                    @click="item.tieWithAbove = !item.tieWithAbove" 
-                                    class="w-6 h-6 rounded-full border bg-white flex items-center justify-center text-xs font-black shadow-sm transition-colors"
-                                    :class="item.tieWithAbove ? 'border-indigo-400 text-indigo-600 bg-indigo-50' : 'border-slate-200 text-slate-300 hover:text-slate-500 hover:border-slate-300'"
-                                    title="Toggle Tie"
-                                >
-                                    =
-                                </button>
-                            </div>
 
                             <div 
                                 class="flex items-center bg-slate-50 border border-slate-200 rounded-lg p-2 shadow-sm relative z-0 transition-all hover:border-indigo-300"
@@ -96,20 +109,31 @@
                                 @dragstart="dragStart($event, cIndex, level, iIndex)"
                                 @dragover.prevent
                                 @drop="drop($event, cIndex, level, iIndex)"
+                                @dragend="dragEnd"
                                 :class="{'opacity-50': dragData && dragData.cIdx === cIndex && dragData.level === level && dragData.itemIdx === iIndex}"
                             >
-                                <div class="drag-handle px-2 text-slate-400 hover:text-slate-600">
+                                <button 
+                                    v-if="iIndex > 0 && item.rating === cat[level].ranking[iIndex-1].rating"
+                                    @click="item.tieWithAbove = !item.tieWithAbove" 
+                                    class="w-6 h-6 shrink-0 rounded border bg-white flex items-center justify-center text-xs font-black shadow-sm transition-colors mr-2"
+                                    :class="item.tieWithAbove ? 'border-indigo-400 text-indigo-600 bg-indigo-50' : 'border-slate-200 text-slate-300 hover:text-slate-500 hover:border-slate-300'"
+                                    title="Toggle Tie"
+                                >
+                                    =
+                                </button>
+                                <div v-else class="w-6 h-6 shrink-0 mr-2"></div> <div class="drag-handle px-1 text-slate-400 hover:text-slate-600 shrink-0">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                                 </div>
+                                
                                 <div class="flex-grow font-bold text-slate-700 ml-2 text-lg">
                                     {{ item.site }}
                                 </div>
-                                <div class="flex items-center bg-white border border-slate-200 rounded px-2">
-                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-2">Rate</label>
+                                
+                                <div class="flex items-center bg-white border border-slate-200 rounded shrink-0">
                                     <select 
                                         v-model.number="item.rating" 
                                         @change="forceSort(cIndex, level)"
-                                        class="py-2 bg-transparent text-slate-800 font-bold outline-none cursor-pointer"
+                                        class="py-2 px-3 bg-transparent text-slate-800 font-bold outline-none cursor-pointer"
                                     >
                                         <option v-for="n in 7" :key="n" :value="n">{{ n }}</option>
                                     </select>
@@ -121,7 +145,7 @@
 
                 <div class="mt-auto">
                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Notes</span>
-                    <textarea v-model="cat[level].notes" class="w-full h-24 p-3 bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-indigo-400 rounded-lg outline-none text-sm text-slate-700 resize-y" placeholder="Add specific reasoning for this level's ranking/rating..."></textarea>
+                    <textarea v-model="cat[level].notes" class="w-full h-24 p-3 bg-slate-50 border border-slate-200 focus:border-indigo-400 rounded-lg outline-none text-sm text-slate-700 resize-none overflow-y-auto"></textarea>
                 </div>
             </div>
             
@@ -140,16 +164,15 @@
 
     createApp({
         setup() {
-            const numWebsites = ref(4);
+            const numWebsites = ref(2); // Changed default to 2
             const websites = reactive([]);
             const categories = reactive([]);
             const dragData = ref(null);
 
-            // Generate list of items based on website array
             const generateRankingList = (sites) => {
                 return sites.map(site => ({
                     site: site,
-                    rating: 1, // Default rating
+                    rating: 1, 
                     tieWithAbove: false
                 }));
             };
@@ -172,13 +195,10 @@
                 if(confirm("DANGER: Wipe all categories and rankings?")) location.reload();
             };
 
-            // Maintain strictly descending order
             const forceSort = (cIndex, level) => {
                 const arr = categories[cIndex][level].ranking;
-                // Stable sort by rating descending
                 arr.sort((a, b) => b.rating - a.rating);
                 
-                // Cleanup ties: if rating isn't equal to above, tie is false
                 for(let i=0; i<arr.length; i++) {
                     if (i === 0 || arr[i].rating !== arr[i-1].rating) {
                         arr[i].tieWithAbove = false;
@@ -196,15 +216,15 @@
                 const source = dragData.value;
                 if(source && source.cIdx === cIdx && source.level === level) {
                     const arr = categories[cIdx][level].ranking;
-                    
-                    // Splice and move
                     const [movedItem] = arr.splice(source.itemIdx, 1);
                     arr.splice(targetIdx, 0, movedItem);
-                    
-                    // Re-enforce rating constraints instantly
                     forceSort(cIdx, level);
                 }
-                dragData.value = null;
+                dragData.value = null; // Clear on drop
+            };
+
+            const dragEnd = () => {
+                dragData.value = null; // Clear if dropped outside
             };
 
             // SYNC WEBSITES
@@ -215,19 +235,16 @@
                     newWebsites.push('W' + String.fromCharCode(65 + i));
                 }
                 
-                // Sync existing categories with new websites
                 categories.forEach(cat => {
                     ['l0', 'l1', 'l2'].forEach(level => {
                         const currentRank = cat[level].ranking;
                         
-                        // Remove missing sites
                         for (let i = currentRank.length - 1; i >= 0; i--) {
                             if (!newWebsites.includes(currentRank[i].site)) {
                                 currentRank.splice(i, 1);
                             }
                         }
                         
-                        // Add new sites
                         newWebsites.forEach(site => {
                             if (!currentRank.find(r => r.site === site)) {
                                 currentRank.push({ site: site, rating: 1, tieWithAbove: false });
@@ -241,7 +258,6 @@
                 websites.splice(0, websites.length, ...newWebsites);
             }, { immediate: true });
 
-            // MATH HELPER: Convert rank arrays into absolute ranks tracking ties
             const computeRanksAndRatings = (rankingArray) => {
                 const ranks = {};
                 const ratings = {};
@@ -252,9 +268,9 @@
                     ratings[item.site] = item.rating;
 
                     if (i > 0 && item.rating === rankingArray[i-1].rating && item.tieWithAbove) {
-                        ranks[item.site] = currentRank; // Tie -> Same Rank
+                        ranks[item.site] = currentRank; 
                     } else {
-                        currentRank = i + 1; // Standard ordinal drop
+                        currentRank = i + 1; 
                         ranks[item.site] = currentRank;
                     }
                 }
@@ -263,56 +279,59 @@
 
             // SCORING LOGIC
             const calculateAxisScore = (levelA, levelB) => {
-                if (categories.length === 0) return '--';
+                if (categories.length === 0) return { strict: '--', entail: '--' };
 
                 const N = websites.length;
-                if (N < 2) return '--';
+                if (N < 2) return { strict: '--', entail: '--' };
 
                 const maxRatingDiff = 6 * N; 
                 const maxKT = (N * (N - 1)) / 2;
                 const maxScorePerCategory = maxRatingDiff + maxKT;
                 
                 const totalDenominator = maxScorePerCategory * categories.length;
-                let totalNumerator = totalDenominator;
+                
+                let strictNumerator = totalDenominator;
+                let entailNumerator = totalDenominator;
 
                 categories.forEach(cat => {
                     const dataA = computeRanksAndRatings(cat[levelA].ranking);
                     const dataB = computeRanksAndRatings(cat[levelB].ranking);
 
-                    // 1. RATING DEDUCTIONS
+                    // 1. RATING DEDUCTIONS (Applies to both)
                     websites.forEach(site => {
                         const diff = Math.abs(dataA.ratings[site] - dataB.ratings[site]);
-                        totalNumerator -= diff;
+                        strictNumerator -= diff;
+                        entailNumerator -= diff;
                     });
 
-                    // 2. KENDALL TAU RANKING DEDUCTIONS (With Entailment Exception)
+                    // 2. RANKING DEDUCTIONS (Kendall Tau)
                     for (let i = 0; i < N; i++) {
                         for (let j = i + 1; j < N; j++) {
                             const siteX = websites[i];
                             const siteY = websites[j];
 
-                            // Relation A: 1 (X wins), -1 (Y wins), 0 (Tie) 
-                            // Note: Lower rank number means better position.
                             const relA = Math.sign(dataA.ranks[siteY] - dataA.ranks[siteX]);
                             const relB = Math.sign(dataB.ranks[siteY] - dataB.ranks[siteX]);
 
-                            // If relative sorting differs between levels
                             if (relA !== relB) {
-                                // Entailment Exception Rule:
-                                // If the *ratings* for X and Y in the target level (level B) are DIFFERENT, 
-                                // then the ranking was mathematically forced by the ratings. 
-                                // Do NOT apply KT deduction.
+                                // Strict always deducts
+                                strictNumerator -= 1;
+                                
+                                // Entailed only deducts if ratings didn't force the swap
                                 if (dataB.ratings[siteX] === dataB.ratings[siteY]) {
-                                    // Ratings are equal. The rank difference was a choice, not entailed. Deduct 1.
-                                    totalNumerator -= 1;
+                                    entailNumerator -= 1;
                                 }
                             }
                         }
                     }
                 });
 
-                if (totalDenominator <= 0) return '--';
-                return ((totalNumerator / totalDenominator) * 100).toFixed(1);
+                if (totalDenominator <= 0) return { strict: '--', entail: '--' };
+                
+                return {
+                    strict: ((strictNumerator / totalDenominator) * 100).toFixed(1),
+                    entail: ((entailNumerator / totalDenominator) * 100).toFixed(1)
+                };
             };
 
             const getL0Score = computed(() => calculateAxisScore('l0', 'l1'));
@@ -321,7 +340,7 @@
             return {
                 numWebsites, categories, dragData,
                 addCategory, removeCategory, resetAll,
-                dragStart, drop, forceSort,
+                dragStart, drop, dragEnd, forceSort,
                 getL0Score, getL1Score
             };
         }
