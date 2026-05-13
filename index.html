@@ -23,13 +23,31 @@
 <div id="app" class="max-w-[1600px] mx-auto space-y-8">
 
     <header class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col gap-6">
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-            <div class="max-w-xl">
+        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6">
+            <div class="max-w-3xl">
                 <h1 class="text-3xl font-bold text-slate-800 tracking-tight">Audit Dashboard</h1>
-                <p class="text-slate-500 mt-1">Journey steps & Axis ranking alignment</p>
+                <p class="text-slate-500 mt-1 mb-4">Journey steps & Axis ranking alignment</p>
+                
+                <div class="text-xs text-slate-600 bg-slate-50 p-3 rounded border border-slate-200 leading-relaxed grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <strong class="text-slate-800">Original (Orig):</strong><br>
+                        <em>Journey:</em> 1 deduction per website per journey with any diff.<br>
+                        <em>Axis:</em> Starts at 7. Deducts for changes >1 (or exactly 1-2 & 6-7). Floor of 1.
+                    </div>
+                    <div>
+                        <strong class="text-slate-800">Strict:</strong><br>
+                        <em>Journey:</em> Deducts for any step difference.<br>
+                        <em>Axis:</em> Deducts for every rating difference & relative ranking flip.
+                    </div>
+                    <div>
+                        <strong class="text-slate-800">Lenient:</strong><br>
+                        <em>Journey:</em> Waives deduction if target is "?".<br>
+                        <em>Axis:</em> Waives rank deductions if mathematically forced or explicitly tied (=).
+                    </div>
+                </div>
             </div>
             
-            <div class="flex flex-wrap items-center gap-6">
+            <div class="flex flex-wrap items-center gap-4 shrink-0">
                 <div class="flex items-center gap-3 bg-slate-50 p-2 rounded border border-slate-200">
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Websites:</label>
                     <input 
@@ -46,90 +64,103 @@
                 </button>
                 
                 <button @click="resetAll" class="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 px-4 py-2 rounded border border-red-100 transition-colors uppercase tracking-wider">
-                    Reset Data
+                    Reset
                 </button>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-800 border border-slate-700 p-4 rounded-lg shadow-sm text-white">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 bg-slate-800 border border-slate-700 p-4 rounded-lg shadow-sm text-white overflow-x-auto">
             
-            <div class="bg-slate-900/50 p-4 rounded border border-slate-700 flex flex-col items-center justify-between">
+            <div class="bg-slate-900/50 p-4 rounded border border-slate-700 flex flex-col items-center min-w-max">
                 <div class="text-[12px] font-black text-slate-200 uppercase tracking-widest mb-3">Journey Score</div>
-                <div class="flex gap-8 w-full justify-center mb-4">
+                <div class="flex gap-8 w-full justify-center">
+                    
                     <div class="text-center">
                         <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-1">L0</div>
-                        <div class="text-[9px] text-slate-500 uppercase font-bold mb-1">Strict | Lenient</div>
-                        <div class="text-xl font-mono font-black">
-                            <span class="text-indigo-400">{{ formatPct(journeyStats.l0.strictNum, journeyStats.l0.den) }}</span><span class="text-slate-500 font-normal px-1">|</span><span class="text-indigo-300">{{ formatPct(journeyStats.l0.entailNum, journeyStats.l0.den) }}</span>
+                        <div class="text-[9px] text-slate-500 uppercase font-bold mb-1">Orig | Strict | Lenient</div>
+                        <div class="text-lg font-mono font-black mb-1">
+                            <span class="text-indigo-200">{{ formatPct(journeyStats.l0.origNum, journeyStats.l0.origDen) }}</span><span class="text-slate-600 font-normal px-1">|</span><span class="text-indigo-400">{{ formatPct(journeyStats.l0.strictNum, journeyStats.l0.den) }}</span><span class="text-slate-600 font-normal px-1">|</span><span class="text-indigo-300">{{ formatPct(journeyStats.l0.entailNum, journeyStats.l0.den) }}</span>
+                        </div>
+                        <div class="text-[11px] font-mono font-bold text-slate-400 border-t border-slate-700/50 pt-1">
+                            <span class="text-indigo-200/70">{{ formatOut7(journeyStats.l0.origNum, journeyStats.l0.origDen) }}</span><span class="text-slate-600/50 font-normal px-1">|</span><span class="text-indigo-400/70">{{ formatOut7(journeyStats.l0.strictNum, journeyStats.l0.den) }}</span><span class="text-slate-600/50 font-normal px-1">|</span><span class="text-indigo-300/70">{{ formatOut7(journeyStats.l0.entailNum, journeyStats.l0.den) }}</span> <span class="text-[8px] uppercase tracking-widest ml-1">/7</span>
                         </div>
                     </div>
-                    <div class="text-center">
+
+                    <div class="w-px bg-slate-700/50"></div>
+                    
+                    <div class="text-center" :class="showL2 ? '' : 'opacity-30 grayscale'">
                         <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-1">L1</div>
-                        <div class="text-[9px] text-slate-500 uppercase font-bold mb-1">Strict | Lenient</div>
-                        <div class="text-xl font-mono font-black" :class="showL2 ? '' : 'text-slate-500'">
-                            <template v-if="showL2">
-                                <span class="text-emerald-400">{{ formatPct(journeyStats.l1.strictNum, journeyStats.l1.den) }}</span><span class="text-slate-500 font-normal px-1">|</span><span class="text-emerald-300">{{ formatPct(journeyStats.l1.entailNum, journeyStats.l1.den) }}</span>
-                            </template>
-                            <template v-else>N/A</template>
+                        <div class="text-[9px] text-slate-500 uppercase font-bold mb-1">Orig | Strict | Lenient</div>
+                        <div class="text-lg font-mono font-black mb-1">
+                            <span class="text-emerald-200">{{ showL2 ? formatPct(journeyStats.l1.origNum, journeyStats.l1.origDen) : '--' }}</span><span class="text-slate-600 font-normal px-1">|</span><span class="text-emerald-400">{{ showL2 ? formatPct(journeyStats.l1.strictNum, journeyStats.l1.den) : '--' }}</span><span class="text-slate-600 font-normal px-1">|</span><span class="text-emerald-300">{{ showL2 ? formatPct(journeyStats.l1.entailNum, journeyStats.l1.den) : '--' }}</span>
+                        </div>
+                        <div class="text-[11px] font-mono font-bold text-slate-400 border-t border-slate-700/50 pt-1">
+                            <span class="text-emerald-200/70">{{ showL2 ? formatOut7(journeyStats.l1.origNum, journeyStats.l1.origDen) : '--' }}</span><span class="text-slate-600/50 font-normal px-1">|</span><span class="text-emerald-400/70">{{ showL2 ? formatOut7(journeyStats.l1.strictNum, journeyStats.l1.den) : '--' }}</span><span class="text-slate-600/50 font-normal px-1">|</span><span class="text-emerald-300/70">{{ showL2 ? formatOut7(journeyStats.l1.entailNum, journeyStats.l1.den) : '--' }}</span> <span class="text-[8px] uppercase tracking-widest ml-1">/7</span>
                         </div>
                     </div>
-                </div>
-                <div class="text-[9px] text-slate-400 text-center leading-tight mt-auto pt-3 border-t border-slate-700/50 w-full">
-                    <strong class="text-slate-300">Strict:</strong> Deducts for any pass/fail difference.<br>
-                    <strong class="text-slate-300">Lenient:</strong> Waives deduction if target level is marked "?".
+
                 </div>
             </div>
 
-            <div class="bg-slate-900/50 p-4 rounded border border-slate-700 flex flex-col items-center justify-between">
+            <div class="bg-slate-900/50 p-4 rounded border border-slate-700 flex flex-col items-center min-w-max">
                 <div class="text-[12px] font-black text-slate-200 uppercase tracking-widest mb-3">Axis Score</div>
-                <div class="flex gap-8 w-full justify-center mb-4">
+                <div class="flex gap-8 w-full justify-center">
+                    
                     <div class="text-center">
                         <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-1">L0</div>
-                        <div class="text-[9px] text-slate-500 uppercase font-bold mb-1">Strict | Lenient</div>
-                        <div class="text-xl font-mono font-black">
-                            <span class="text-indigo-400">{{ formatPct(axisStats.l0.strictNum, axisStats.l0.den) }}</span><span class="text-slate-500 font-normal px-1">|</span><span class="text-indigo-300">{{ formatPct(axisStats.l0.entailNum, axisStats.l0.den) }}</span>
+                        <div class="text-[9px] text-slate-500 uppercase font-bold mb-1">Orig | Strict | Lenient</div>
+                        <div class="text-lg font-mono font-black mb-1">
+                            <span class="text-indigo-200">--</span><span class="text-slate-600 font-normal px-1">|</span><span class="text-indigo-400">{{ formatPct(axisStats.l0.strictNum, axisStats.l0.den) }}</span><span class="text-slate-600 font-normal px-1">|</span><span class="text-indigo-300">{{ formatPct(axisStats.l0.entailNum, axisStats.l0.den) }}</span>
+                        </div>
+                        <div class="text-[11px] font-mono font-bold text-slate-400 border-t border-slate-700/50 pt-1">
+                            <span class="text-indigo-200/70">{{ formatOrigAxisScore(axisStats.l0.origDed, axisStats.l0.den) }}</span><span class="text-slate-600/50 font-normal px-1">|</span><span class="text-indigo-400/70">{{ formatOut7(axisStats.l0.strictNum, axisStats.l0.den) }}</span><span class="text-slate-600/50 font-normal px-1">|</span><span class="text-indigo-300/70">{{ formatOut7(axisStats.l0.entailNum, axisStats.l0.den) }}</span> <span class="text-[8px] uppercase tracking-widest ml-1">/7</span>
                         </div>
                     </div>
-                    <div class="text-center">
+
+                    <div class="w-px bg-slate-700/50"></div>
+
+                    <div class="text-center" :class="showL2 ? '' : 'opacity-30 grayscale'">
                         <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-1">L1</div>
-                        <div class="text-[9px] text-slate-500 uppercase font-bold mb-1">Strict | Lenient</div>
-                        <div class="text-xl font-mono font-black" :class="showL2 ? '' : 'text-slate-500'">
-                            <template v-if="showL2">
-                                <span class="text-emerald-400">{{ formatPct(axisStats.l1.strictNum, axisStats.l1.den) }}</span><span class="text-slate-500 font-normal px-1">|</span><span class="text-emerald-300">{{ formatPct(axisStats.l1.entailNum, axisStats.l1.den) }}</span>
-                            </template>
-                            <template v-else>N/A</template>
+                        <div class="text-[9px] text-slate-500 uppercase font-bold mb-1">Orig | Strict | Lenient</div>
+                        <div class="text-lg font-mono font-black mb-1">
+                            <span class="text-emerald-200">--</span><span class="text-slate-600 font-normal px-1">|</span><span class="text-emerald-400">{{ showL2 ? formatPct(axisStats.l1.strictNum, axisStats.l1.den) : '--' }}</span><span class="text-slate-600 font-normal px-1">|</span><span class="text-emerald-300">{{ showL2 ? formatPct(axisStats.l1.entailNum, axisStats.l1.den) : '--' }}</span>
+                        </div>
+                        <div class="text-[11px] font-mono font-bold text-slate-400 border-t border-slate-700/50 pt-1">
+                            <span class="text-emerald-200/70">{{ showL2 ? formatOrigAxisScore(axisStats.l1.origDed, axisStats.l1.den) : '--' }}</span><span class="text-slate-600/50 font-normal px-1">|</span><span class="text-emerald-400/70">{{ showL2 ? formatOut7(axisStats.l1.strictNum, axisStats.l1.den) : '--' }}</span><span class="text-slate-600/50 font-normal px-1">|</span><span class="text-emerald-300/70">{{ showL2 ? formatOut7(axisStats.l1.entailNum, axisStats.l1.den) : '--' }}</span> <span class="text-[8px] uppercase tracking-widest ml-1">/7</span>
                         </div>
                     </div>
-                </div>
-                <div class="text-[9px] text-slate-400 text-center leading-tight mt-auto pt-3 border-t border-slate-700/50 w-full">
-                    <strong class="text-slate-300">Strict:</strong> Deducts for rating differences & ranking flips.<br>
-                    <strong class="text-slate-300">Lenient:</strong> Waives ranking deduction if mathematically forced or tied.
+
                 </div>
             </div>
 
-            <div class="bg-slate-700/50 p-4 rounded border border-slate-600 flex flex-col items-center justify-between shadow-inner">
+            <div class="bg-slate-700/50 p-4 rounded border border-slate-600 flex flex-col items-center min-w-max shadow-inner">
                 <div class="text-[12px] font-black text-white uppercase tracking-widest mb-3">Total Combined Score</div>
-                <div class="flex gap-8 w-full justify-center mb-4">
+                <div class="flex gap-8 w-full justify-center">
+                    
                     <div class="text-center">
                         <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-1">L0</div>
-                        <div class="text-[9px] text-slate-300 uppercase font-bold mb-1">Strict | Lenient</div>
-                        <div class="text-xl font-mono font-black">
-                            <span class="text-indigo-300">{{ formatPct(journeyStats.l0.strictNum + axisStats.l0.strictNum, journeyStats.l0.den + axisStats.l0.den) }}</span><span class="text-slate-400 font-normal px-1">|</span><span class="text-indigo-200">{{ formatPct(journeyStats.l0.entailNum + axisStats.l0.entailNum, journeyStats.l0.den + axisStats.l0.den) }}</span>
+                        <div class="text-[9px] text-slate-300 uppercase font-bold mb-1">Orig | Strict | Lenient</div>
+                        <div class="text-lg font-mono font-black mb-1">
+                            <span class="text-indigo-200">--</span><span class="text-slate-500 font-normal px-1">|</span><span class="text-indigo-300">{{ formatPct(journeyStats.l0.strictNum + axisStats.l0.strictNum, journeyStats.l0.den + axisStats.l0.den) }}</span><span class="text-slate-500 font-normal px-1">|</span><span class="text-indigo-200">{{ formatPct(journeyStats.l0.entailNum + axisStats.l0.entailNum, journeyStats.l0.den + axisStats.l0.den) }}</span>
+                        </div>
+                        <div class="text-[11px] font-mono font-bold text-slate-300 border-t border-slate-600 pt-1">
+                            <span class="text-indigo-200/90">{{ formatOrigOverallScore(journeyStats.l0.origNum, journeyStats.l0.origDen, axisStats.l0.origDed, axisStats.l0.den) }}</span><span class="text-slate-500/70 font-normal px-1">|</span><span class="text-indigo-300/90">{{ formatOut7(journeyStats.l0.strictNum + axisStats.l0.strictNum, journeyStats.l0.den + axisStats.l0.den) }}</span><span class="text-slate-500/70 font-normal px-1">|</span><span class="text-indigo-200/90">{{ formatOut7(journeyStats.l0.entailNum + axisStats.l0.entailNum, journeyStats.l0.den + axisStats.l0.den) }}</span> <span class="text-[8px] uppercase tracking-widest ml-1 text-slate-400">/7</span>
                         </div>
                     </div>
-                    <div class="text-center">
+
+                    <div class="w-px bg-slate-600"></div>
+
+                    <div class="text-center" :class="showL2 ? '' : 'opacity-30 grayscale'">
                         <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-1">L1</div>
-                        <div class="text-[9px] text-slate-300 uppercase font-bold mb-1">Strict | Lenient</div>
-                        <div class="text-xl font-mono font-black" :class="showL2 ? '' : 'text-slate-500'">
-                            <template v-if="showL2">
-                                <span class="text-emerald-300">{{ formatPct(journeyStats.l1.strictNum + axisStats.l1.strictNum, journeyStats.l1.den + axisStats.l1.den) }}</span><span class="text-slate-400 font-normal px-1">|</span><span class="text-emerald-200">{{ formatPct(journeyStats.l1.entailNum + axisStats.l1.entailNum, journeyStats.l1.den + axisStats.l1.den) }}</span>
-                            </template>
-                            <template v-else>N/A</template>
+                        <div class="text-[9px] text-slate-300 uppercase font-bold mb-1">Orig | Strict | Lenient</div>
+                        <div class="text-lg font-mono font-black mb-1">
+                            <span class="text-emerald-200">--</span><span class="text-slate-500 font-normal px-1">|</span><span class="text-emerald-300">{{ showL2 ? formatPct(journeyStats.l1.strictNum + axisStats.l1.strictNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span><span class="text-slate-500 font-normal px-1">|</span><span class="text-emerald-200">{{ showL2 ? formatPct(journeyStats.l1.entailNum + axisStats.l1.entailNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span>
+                        </div>
+                        <div class="text-[11px] font-mono font-bold text-slate-300 border-t border-slate-600 pt-1">
+                            <span class="text-emerald-200/90">{{ showL2 ? formatOrigOverallScore(journeyStats.l1.origNum, journeyStats.l1.origDen, axisStats.l1.origDed, axisStats.l1.den) : '--' }}</span><span class="text-slate-500/70 font-normal px-1">|</span><span class="text-emerald-300/90">{{ showL2 ? formatOut7(journeyStats.l1.strictNum + axisStats.l1.strictNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span><span class="text-slate-500/70 font-normal px-1">|</span><span class="text-emerald-200/90">{{ showL2 ? formatOut7(journeyStats.l1.entailNum + axisStats.l1.entailNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span> <span class="text-[8px] uppercase tracking-widest ml-1 text-slate-400">/7</span>
                         </div>
                     </div>
-                </div>
-                <div class="text-[9px] text-slate-300 text-center leading-tight mt-auto pt-3 border-t border-slate-600 w-full">
-                    Aggregated numerators and denominators<br>across both Journey and Axis modules.
+
                 </div>
             </div>
 
@@ -330,7 +361,6 @@
                     <textarea v-model="cat[level].notes" class="w-full h-24 p-3 bg-slate-50 border border-slate-200 focus:border-indigo-400 rounded-lg outline-none text-sm text-slate-700 resize-none overflow-y-auto"></textarea>
                 </div>
             </div>
-            
         </div>
     </div>
 
@@ -363,17 +393,12 @@
                 return data;
             };
 
-            const generateJourneyNotesData = () => {
-                return { l0: '', l1: '', l2: '' };
-            };
+            const generateJourneyNotesData = () => { return { l0: '', l1: '', l2: '' }; };
 
             const addJourney = () => {
                 journeys.push({
-                    id: Date.now(),
-                    name: `Journey ${journeys.length + 1}`,
-                    steps: [
-                        { id: Date.now() + 1, stepText: '', notes: generateJourneyNotesData(), data: generateJourneySiteData(websites) }
-                    ]
+                    id: Date.now(), name: `Journey ${journeys.length + 1}`,
+                    steps: [ { id: Date.now() + 1, stepText: '', notes: generateJourneyNotesData(), data: generateJourneySiteData(websites) } ]
                 });
             };
 
@@ -386,7 +411,6 @@
             const removeJourney = (jIndex) => { if(confirm("Delete this entire journey?")) journeys.splice(jIndex, 1); };
             const removeStep = (jIndex, sIndex) => { if(confirm("Delete this step?")) journeys[jIndex].steps.splice(sIndex, 1); };
 
-            // For UI highlighting (Lenient visually marks errors if no target '?')
             const isLenientErrorJourneyL0 = (siteData) => {
                 if (siteData.l0 === '' || siteData.l1 === '') return false;
                 if (siteData.l1_eq) return false; 
@@ -400,45 +424,58 @@
             };
 
             const journeyStats = computed(() => {
-                let l0_valid = 0, l0_strict_err = 0, l0_lenient_err = 0;
-                let l1_valid = 0, l1_strict_err = 0, l1_lenient_err = 0;
+                let l0_stepDen = 0, l0_strictErr = 0, l0_lenientErr = 0;
+                let l1_stepDen = 0, l1_strictErr = 0, l1_lenientErr = 0;
+                
+                let numSites = websites.length;
+                let l0_origDen = journeys.length * numSites;
+                let l1_origDen = journeys.length * numSites;
+                let l0_origErr = 0;
+                let l1_origErr = 0;
 
                 journeys.forEach(j => {
+                    let j_l0_errors = new Set();
+                    let j_l1_errors = new Set();
+
                     j.steps.forEach(s => {
                         websites.forEach(site => {
                             const d = s.data[site];
-                            
-                            // L0 checks
                             if (d && d.l0 !== '' && d.l1 !== '') {
-                                l0_valid++;
+                                l0_stepDen++;
                                 if (d.l0 !== d.l1) {
-                                    l0_strict_err++;
-                                    if (!d.l1_eq) l0_lenient_err++;
+                                    l0_strictErr++;
+                                    if (!d.l1_eq) l0_lenientErr++;
+                                    j_l0_errors.add(site); // Original Logic: flags website in this journey
                                 }
                             }
-                            
-                            // L1 checks
                             if (d && d.l1 !== '' && d.l2 !== '') {
-                                l1_valid++;
+                                l1_stepDen++;
                                 if (d.l1 !== d.l2) {
-                                    l1_strict_err++;
-                                    if (!d.l2_eq) l1_lenient_err++;
+                                    l1_strictErr++;
+                                    if (!d.l2_eq) l1_lenientErr++;
+                                    j_l1_errors.add(site);
                                 }
                             }
                         });
                     });
+                    l0_origErr += j_l0_errors.size;
+                    l1_origErr += j_l1_errors.size;
                 });
 
                 return {
                     l0: { 
-                        strictNum: l0_valid - l0_strict_err, 
-                        entailNum: l0_valid - l0_lenient_err, 
-                        den: l0_valid 
+                        strictNum: l0_stepDen - l0_strictErr, 
+                        entailNum: l0_stepDen - l0_lenientErr, 
+                        den: l0_stepDen,
+                        origNum: l0_origDen - l0_origErr,
+                        origDen: l0_origDen
                     },
                     l1: { 
-                        strictNum: l1_valid - l1_strict_err, 
-                        entailNum: l1_valid - l1_lenient_err, 
-                        den: l1_valid 
+                        strictNum: l1_stepDen - l1_strictErr, 
+                        entailNum: l1_stepDen - l1_lenientErr, 
+                        den: l1_stepDen,
+                        origNum: l1_origDen - l1_origErr,
+                        origDen: l1_origDen
                     }
                 };
             });
@@ -448,9 +485,7 @@
             // ============================
             const categories = reactive([]);
 
-            const generateAxisRankingList = (sites) => {
-                return sites.map(site => ({ site: site, rating: '', tieWithAbove: false }));
-            };
+            const generateAxisRankingList = (sites) => { return sites.map(site => ({ site: site, rating: '', tieWithAbove: false })); };
 
             const addCategory = () => {
                 categories.push({
@@ -484,9 +519,7 @@
             const moveUp = (cIndex, level, iIndex) => {
                 const arr = categories[cIndex][level].ranking;
                 if (iIndex > 0 && arr[iIndex].rating !== '' && arr[iIndex].rating === arr[iIndex - 1].rating) {
-                    const temp = arr[iIndex];
-                    arr[iIndex] = arr[iIndex - 1];
-                    arr[iIndex - 1] = temp;
+                    const temp = arr[iIndex]; arr[iIndex] = arr[iIndex - 1]; arr[iIndex - 1] = temp;
                     updateTies(arr);
                 }
             };
@@ -494,22 +527,16 @@
             const moveDown = (cIndex, level, iIndex) => {
                 const arr = categories[cIndex][level].ranking;
                 if (iIndex < arr.length - 1 && arr[iIndex].rating !== '' && arr[iIndex].rating === arr[iIndex + 1].rating) {
-                    const temp = arr[iIndex];
-                    arr[iIndex] = arr[iIndex + 1];
-                    arr[iIndex + 1] = temp;
+                    const temp = arr[iIndex]; arr[iIndex] = arr[iIndex + 1]; arr[iIndex + 1] = temp;
                     updateTies(arr);
                 }
             };
 
             const computeRanksAndRatings = (rankingArray) => {
-                const ranks = {};
-                const ratings = {};
-                let currentRank = 1;
-
+                const ranks = {}; const ratings = {}; let currentRank = 1;
                 for(let i=0; i<rankingArray.length; i++) {
                     const item = rankingArray[i];
                     ratings[item.site] = item.rating;
-
                     if (i > 0 && item.rating === rankingArray[i-1].rating && item.tieWithAbove) {
                         ranks[item.site] = currentRank; 
                     } else {
@@ -521,58 +548,73 @@
             };
 
             const calculateAxisRawScores = (levelA, levelB) => {
-                if (categories.length === 0) return { strictNum: 0, entailNum: 0, den: 0 };
-
+                if (categories.length === 0) return { strictNum: 0, entailNum: 0, den: 0, origDed: 0 };
                 const N = websites.length;
-                if (N < 2) return { strictNum: 0, entailNum: 0, den: 0 };
+                if (N < 2) return { strictNum: 0, entailNum: 0, den: 0, origDed: 0 };
 
-                const maxRatingDiff = 6 * N; 
-                const maxKT = (N * (N - 1)) / 2;
-                const maxScorePerCategory = maxRatingDiff + maxKT;
+                const maxScorePerCategory = (6 * N) + ((N * (N - 1)) / 2);
                 
-                let totalDenominator = 0;
-                let strictNumerator = 0;
-                let entailNumerator = 0;
+                let totalDenominator = 0, strictNumerator = 0, entailNumerator = 0, origDeductions = 0;
 
                 categories.forEach(cat => {
                     const hasEmptyA = cat[levelA].ranking.some(r => r.rating === '');
                     const hasEmptyB = cat[levelB].ranking.some(r => r.rating === '');
-                    if (hasEmptyA || hasEmptyB) return; // Skip this category if ratings are incomplete
+                    if (hasEmptyA || hasEmptyB) return; 
 
                     totalDenominator += maxScorePerCategory;
                     let strictCatScore = maxScorePerCategory;
                     let entailCatScore = maxScorePerCategory;
+                    let origCatChanges = 0;
 
                     const dataA = computeRanksAndRatings(cat[levelA].ranking);
                     const dataB = computeRanksAndRatings(cat[levelB].ranking);
 
                     websites.forEach(site => {
-                        const diff = Math.abs(dataA.ratings[site] - dataB.ratings[site]);
+                        let r1 = dataA.ratings[site], r2 = dataB.ratings[site];
+                        let diff = Math.abs(r1 - r2);
+                        
                         strictCatScore -= diff;
                         entailCatScore -= diff;
+
+                        // Original Logic Qualifiers
+                        if (diff > 1) {
+                            origCatChanges++;
+                        } else if (diff === 1) {
+                            if ((r1===1 && r2===2) || (r1===2 && r2===1) || (r1===6 && r2===7) || (r1===7 && r2===6)) {
+                                origCatChanges++;
+                            }
+                        }
+
+                        let rankDiff = Math.abs(dataA.ranks[site] - dataB.ranks[site]);
+                        if (rankDiff > 1) origCatChanges++;
                     });
 
                     for (let i = 0; i < N; i++) {
                         for (let j = i + 1; j < N; j++) {
-                            const siteX = websites[i];
-                            const siteY = websites[j];
-
-                            const relA = Math.sign(dataA.ranks[siteY] - dataA.ranks[siteX]);
-                            const relB = Math.sign(dataB.ranks[siteY] - dataB.ranks[siteX]);
+                            const relA = Math.sign(dataA.ranks[websites[j]] - dataA.ranks[websites[i]]);
+                            const relB = Math.sign(dataB.ranks[websites[j]] - dataB.ranks[websites[i]]);
 
                             if (relA !== relB) {
                                 strictCatScore -= 1;
-                                if (dataB.ratings[siteX] === dataB.ratings[siteY]) {
+                                if (dataB.ratings[websites[i]] === dataB.ratings[websites[j]]) {
                                     entailCatScore -= 1;
                                 }
                             }
                         }
                     }
+
                     strictNumerator += strictCatScore;
                     entailNumerator += entailCatScore;
+
+                    // Apply Original Category Deductions
+                    if (origCatChanges >= 3) {
+                        origDeductions += 2;
+                    } else if (origCatChanges >= 1) {
+                        origDeductions += 1;
+                    }
                 });
 
-                return { strictNum: strictNumerator, entailNum: entailNumerator, den: totalDenominator };
+                return { strictNum: strictNumerator, entailNum: entailNumerator, den: totalDenominator, origDed: origDeductions };
             };
 
             const axisStats = computed(() => {
@@ -583,31 +625,23 @@
             });
 
             // ============================
-            // GLOBAL LOGIC
+            // GLOBAL LOGIC / FORMATTERS
             // ============================
-            const resetAll = () => {
-                if(confirm("DANGER: Wipe all data and reset?")) location.reload();
-            };
+            const resetAll = () => { if(confirm("DANGER: Wipe all data and reset?")) location.reload(); };
 
             watch(numWebsites, (newVal) => {
                 const count = Math.min(Math.max(parseInt(newVal) || 2, 2), 26);
                 const newWebsites = [];
-                for (let i = 0; i < count; i++) {
-                    newWebsites.push('W' + String.fromCharCode(65 + i));
-                }
+                for (let i = 0; i < count; i++) { newWebsites.push('W' + String.fromCharCode(65 + i)); }
                 
-                // Sync Journey
                 journeys.forEach(j => {
                     j.steps.forEach(s => {
                         newWebsites.forEach(site => {
-                            if (!s.data[site]) {
-                                s.data[site] = { l0: '', l1: '', l2: '', l0_eq: false, l1_eq: false, l2_eq: false };
-                            }
+                            if (!s.data[site]) s.data[site] = { l0: '', l1: '', l2: '', l0_eq: false, l1_eq: false, l2_eq: false };
                         });
                     });
                 });
 
-                // Sync Axis
                 categories.forEach(cat => {
                     ['l0', 'l1', 'l2'].forEach(level => {
                         const currentRank = cat[level].ranking;
@@ -631,11 +665,27 @@
                 return ((num / den) * 100).toFixed(1) + '%';
             };
 
+            const formatOut7 = (num, den) => {
+                if (den === 0) return '--';
+                return ((num / den) * 7).toFixed(2);
+            };
+
+            const formatOrigAxisScore = (deductions, catDen) => {
+                if (catDen === 0) return '--';
+                return Math.max(1, 7 - deductions).toFixed(2);
+            };
+
+            const formatOrigOverallScore = (jNum, jDen, aDed, aDen) => {
+                if (jDen === 0 && aDen === 0) return '--';
+                let jScore = jDen > 0 ? (jNum / jDen * 7) : 7; // If no journey, axis carries
+                return Math.max(1, jScore - aDed).toFixed(2);
+            };
+
             return {
                 numWebsites, showL2, websites,
                 journeys, addJourney, addStep, removeJourney, removeStep, isLenientErrorJourneyL0, isLenientErrorJourneyL1,
                 categories, addCategory, removeCategory, moveUp, moveDown, forceSort,
-                resetAll, journeyStats, axisStats, formatPct
+                resetAll, journeyStats, axisStats, formatPct, formatOut7, formatOrigAxisScore, formatOrigOverallScore
             };
         }
     }).mount('#app');
