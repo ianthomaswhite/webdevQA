@@ -3,171 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Journey & Category Audit</title>
+    <title>Journey & Axis Audit</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         select { -webkit-appearance: none; appearance: none; text-align: center; cursor: pointer; }
+        .list-enter-active, .list-leave-active { transition: all 0.3s ease; }
+        .list-enter-from, .list-leave-to { opacity: 0; transform: translateY(10px); }
+        .list-move { transition: transform 0.3s ease; }
+        .uniform-bg { background-color: #ffffff; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans min-h-screen p-4 md:p-8">
 
-<div id="app" class="max-w-[1600px] mx-auto">
+<div id="app" class="max-w-[1600px] mx-auto space-y-8">
 
-    <div v-if="!isInitialized" class="min-h-[60vh] flex flex-col items-center justify-center">
-        <div class="bg-white p-10 rounded-xl shadow-sm border border-slate-200 w-full max-w-md text-center">
-            <h1 class="text-2xl font-bold text-slate-800 mb-6">Initialize Audit</h1>
-            <div class="space-y-4">
-                <div class="text-left">
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Number of Websites</label>
+    <header class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col gap-6">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+            <div class="max-w-xl">
+                <h1 class="text-3xl font-bold text-slate-800 tracking-tight">Audit Dashboard</h1>
+                <p class="text-slate-500 mt-1 mb-4">Journey steps & Axis ranking alignment</p>
+                
+                <div class="text-xs text-slate-600 bg-slate-50 p-3 rounded border border-slate-200 leading-relaxed">
+                    <strong class="text-slate-800">Strict:</strong> Deducts points for every rating difference and every relative ranking flip.<br>
+                    <strong class="text-slate-800">Lenient:</strong> Waives ranking deductions if the new ratings mathematically forced the flip, or if the items are marked as tied (=) in both levels. Journey scores remain identical across both logic sets.
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-6">
+                <div class="flex items-center gap-3 bg-slate-50 p-2 rounded border border-slate-200">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Websites:</label>
                     <input 
                         type="number" 
-                        min="1" 
+                        min="2" 
                         max="26"
                         v-model="numWebsites" 
-                        class="w-full px-4 py-3 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-center text-xl font-mono"
+                        class="w-16 p-1 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-500 outline-none text-center font-mono font-bold"
                     >
                 </div>
-                <button 
-                    @click="initializeData" 
-                    :disabled="numWebsites < 1"
-                    class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold py-3 rounded transition-colors"
-                >
-                    Start
+                
+                <button @click="showL2 = !showL2" :class="['px-4 py-2 rounded text-xs font-bold uppercase tracking-wider border transition-colors', showL2 ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-slate-100 text-slate-500 border-slate-200']">
+                    {{ showL2 ? 'Hide L2' : 'Show L2' }}
+                </button>
+                
+                <button @click="resetAll" class="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 px-4 py-2 rounded border border-red-100 transition-colors uppercase tracking-wider">
+                    Reset Data
                 </button>
             </div>
         </div>
-    </div>
 
-    <div v-else class="space-y-8">
-        <header class="flex justify-between items-end border-b border-slate-200 pb-4">
-            <div>
-                <h1 class="text-3xl font-bold text-slate-800 tracking-tight">Journey Audit</h1>
-                <p class="text-slate-500 mt-1">Comparing L0, L1, and L2 across {{ websites.length }} sites</p>
-            </div>
-            <div class="flex gap-4">
-                <div class="bg-white border border-slate-200 px-4 py-2 rounded shadow-sm flex items-center gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-800 border border-slate-700 p-4 rounded-lg shadow-sm text-white">
+            
+            <div class="bg-slate-900/50 p-4 rounded border border-slate-700 flex flex-col items-center justify-center">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Journey Score</div>
+                <div class="flex gap-6">
                     <div class="text-center">
-                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">L0 Score (vs L1)</div>
-                        <div class="text-xl font-mono font-black text-slate-800">{{ getL0Score }}%</div>
+                        <div class="text-[9px] text-slate-500 uppercase font-bold">L0 (vs L1)</div>
+                        <div class="text-xl font-mono font-black text-indigo-400">{{ formatPct(journeyStats.l0.num, journeyStats.l0.den) }}<span v-if="journeyStats.l0.den">%</span></div>
                     </div>
-                    <div class="w-px h-8 bg-slate-200"></div>
                     <div class="text-center">
-                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">L1 Score (vs L2)</div>
-                        <div class="text-xl font-mono font-black text-slate-800">{{ getL1Score }}%</div>
+                        <div class="text-[9px] text-slate-500 uppercase font-bold">L1 (vs L2)</div>
+                        <div class="text-xl font-mono font-black" :class="showL2 ? 'text-emerald-400' : 'text-slate-500'">
+                            <template v-if="showL2">{{ formatPct(journeyStats.l1.num, journeyStats.l1.den) }}<span v-if="journeyStats.l1.den">%</span></template>
+                            <template v-else>N/A</template>
+                        </div>
                     </div>
                 </div>
             </div>
-        </header>
 
-        <div v-for="(journey, jIndex) in journeys" :key="journey.id" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                <input v-model="journey.name" class="font-bold text-lg bg-transparent border-none focus:ring-0 p-0 text-slate-800 placeholder-slate-400 w-1/2" placeholder="Journey Name">
-                <button @click="addStep(jIndex)" class="px-3 py-1 text-xs font-bold bg-white text-blue-600 border border-blue-200 rounded hover:bg-blue-50 shadow-sm transition-colors">+ Add Step</button>
+            <div class="bg-slate-900/50 p-4 rounded border border-slate-700 flex flex-col items-center justify-center">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Axis Score</div>
+                <div class="flex gap-6">
+                    <div class="text-center">
+                        <div class="text-[9px] text-slate-500 uppercase font-bold">L0 Strict | Lenient</div>
+                        <div class="text-lg font-mono font-black">
+                            <span class="text-indigo-400">{{ formatPct(axisStats.l0.strictNum, axisStats.l0.den) }}</span><span class="text-slate-500 font-normal px-1">|</span><span class="text-indigo-300">{{ formatPct(axisStats.l0.entailNum, axisStats.l0.den) }}</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-[9px] text-slate-500 uppercase font-bold">L1 Strict | Lenient</div>
+                        <div class="text-lg font-mono font-black" :class="showL2 ? '' : 'text-slate-500'">
+                            <template v-if="showL2">
+                                <span class="text-emerald-400">{{ formatPct(axisStats.l1.strictNum, axisStats.l1.den) }}</span><span class="text-slate-500 font-normal px-1">|</span><span class="text-emerald-300">{{ formatPct(axisStats.l1.entailNum, axisStats.l1.den) }}</span>
+                            </template>
+                            <template v-else>N/A</template>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm whitespace-nowrap min-w-max">
-                    <thead>
-                        <tr class="bg-slate-100 text-slate-500 uppercase tracking-wider font-semibold text-xs divide-x divide-slate-200">
-                            <th class="p-3 w-64 sticky left-0 z-10 bg-slate-100">Step</th>
-                            <th class="p-3 w-64">Reasoning</th>
-                            <th class="p-3 w-32 text-center">Status</th>
-                            <th v-for="site in websites" :key="site" colspan="3" class="p-3 text-center bg-slate-50 border-b-2 border-indigo-200 text-indigo-800">{{ site }}</th>
+            <div class="bg-slate-700/50 p-4 rounded border border-slate-600 flex flex-col items-center justify-center shadow-inner">
+                <div class="text-[10px] font-bold text-white uppercase tracking-widest mb-2">Total Combined Score</div>
+                <div class="flex gap-6">
+                    <div class="text-center">
+                        <div class="text-[9px] text-slate-300 uppercase font-bold">L0 Strict | Lenient</div>
+                        <div class="text-xl font-mono font-black">
+                            <span class="text-indigo-300">{{ formatPct(journeyStats.l0.num + axisStats.l0.strictNum, journeyStats.l0.den + axisStats.l0.den) }}</span><span class="text-slate-400 font-normal px-1">|</span><span class="text-indigo-200">{{ formatPct(journeyStats.l0.num + axisStats.l0.entailNum, journeyStats.l0.den + axisStats.l0.den) }}</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-[9px] text-slate-300 uppercase font-bold">L1 Strict | Lenient</div>
+                        <div class="text-xl font-mono font-black" :class="showL2 ? '' : 'text-slate-500'">
+                            <template v-if="showL2">
+                                <span class="text-emerald-300">{{ formatPct(journeyStats.l1.num + axisStats.l1.strictNum, journeyStats.l1.den + axisStats.l1.den) }}</span><span class="text-slate-400 font-normal px-1">|</span><span class="text-emerald-200">{{ formatPct(journeyStats.l1.num + axisStats.l1.entailNum, journeyStats.l1.den + axisStats.l1.den) }}</span>
+                            </template>
+                            <template v-else>N/A</template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <div class="w-full h-px bg-slate-300 my-8"></div>
+
+    <div class="mb-4">
+        <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">Journey Audit</h2>
+    </div>
+
+    <div v-for="(journey, jIndex) in journeys" :key="journey.id" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
+        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+            <input v-model="journey.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 w-1/2" placeholder="Journey Name">
+            <div class="flex gap-2">
+                <button @click="addStep(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-blue-600 border border-blue-200 rounded hover:bg-blue-50">+ Add Step</button>
+                <button @click="removeJourney(jIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-red-500 border border-red-200 rounded hover:bg-red-50">Delete Journey</button>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto p-4">
+            <table class="w-full text-left text-sm whitespace-nowrap border-collapse">
+                <template v-for="(step, sIndex) in journey.steps" :key="step.id">
+                    <tbody class="border-[2px] border-slate-200">
+                        <tr class="bg-slate-100 text-slate-800 border-b border-slate-200">
+                            <td class="p-1 w-8 text-center font-black text-sm border-r border-slate-200">{{ sIndex + 1 }}</td>
+                            <td class="p-0 w-[32rem] min-w-[32rem] border-r border-slate-200">
+                                <textarea v-model="step.stepText" class="w-full h-16 p-2 bg-transparent outline-none resize-none overflow-y-auto font-semibold text-sm leading-tight"></textarea>
+                            </td>
+                            <template v-for="site in websites" :key="site">
+                                <td colspan="2" class="p-1 text-center font-bold text-sm border-r border-slate-200">{{ site }}</td>
+                            </template>
+                            <td :rowspan="showL2 ? 5 : 4" class="w-10 bg-slate-50 align-middle text-center">
+                                <button @click="removeStep(jIndex, sIndex)" class="text-slate-400 hover:text-red-600" title="Delete Step">
+                                    <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </td>
                         </tr>
-                        <tr class="bg-white text-slate-400 uppercase tracking-wider font-semibold text-[10px] divide-x divide-slate-100 border-b border-slate-200">
-                            <th class="p-2 sticky left-0 z-10 bg-white"></th>
-                            <th class="p-2"></th>
-                            <th class="p-2"></th>
+
+                        <tr class="bg-slate-50 text-slate-500 text-[10px] uppercase font-bold tracking-wider border-b border-slate-200">
+                            <td class="p-1 text-center border-r border-slate-200">Level</td>
+                            <td class="p-1 text-center border-r border-slate-200">Notes</td>
                             <template v-for="site in websites" :key="site + '-sub'">
-                                <th class="p-2 text-center w-16">L0</th>
-                                <th class="p-2 text-center w-16">L1</th>
-                                <th class="p-2 text-center w-16 bg-slate-50">L2</th>
+                                <td class="p-1 text-center w-12 border-r border-slate-200">Status</td>
+                                <td class="p-1 text-center w-8 border-r border-slate-200">?</td>
                             </template>
                         </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        <tr v-for="(step, sIndex) in journey.steps" :key="step.id" class="hover:bg-slate-50 divide-x divide-slate-100">
-                            <td class="p-0 sticky left-0 z-10 bg-white group-hover:bg-slate-50">
-                                <input v-model="step.stepText" class="w-full h-full p-3 bg-transparent border-none outline-none text-slate-700" placeholder="Describe step...">
+
+                        <tr class="bg-white hover:bg-slate-50 border-b border-slate-100">
+                            <td class="p-1 text-center font-black text-slate-400 border-r border-slate-200 text-xs">L0</td>
+                            <td class="p-0 border-r border-slate-200 w-[32rem] min-w-[32rem]">
+                                <textarea v-model="step.notes.l0" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight"></textarea>
                             </td>
-                            <td class="p-0">
-                                <input v-model="step.reasoningText" class="w-full h-full p-3 bg-transparent border-none outline-none text-slate-700" placeholder="Reasoning...">
-                            </td>
-                            <td class="p-2 text-center">
-                                <select v-model="step.status" class="w-full p-1.5 border border-slate-200 rounded text-xs bg-white text-slate-700 outline-none">
-                                    <option value="" disabled selected>--</option>
-                                    <option value="Correct">Correct</option>
-                                    <option value="Equivocal">Equivocal</option>
-                                    <option value="Incorrect">Incorrect</option>
-                                </select>
-                            </td>
-                            
-                            <template v-for="site in websites" :key="site + step.id">
-                                <td class="p-1">
-                                    <select v-model="step.data[site].l0" class="w-full h-8 border border-slate-200 rounded bg-white text-lg outline-none">
+                            <template v-for="site in websites" :key="site + '-l0'">
+                                <td class="p-0 border-r border-slate-200 w-12">
+                                    <select v-model="step.data[site].l0" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-100 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td class="p-1">
-                                    <select v-model="step.data[site].l1" class="w-full h-8 border border-slate-200 rounded bg-white text-lg outline-none" :class="{'bg-red-50 border-red-300': isError(step.status, step.data[site].l0, step.data[site].l1)}">
+                                <td class="p-0 border-r border-slate-200 text-center w-8 bg-slate-50/30">
+                                    <button @click="step.data[site].l0_eq = !step.data[site].l0_eq" :class="step.data[site].l0_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-100'" class="w-full h-12 text-sm transition-colors">
+                                        ?
+                                    </button>
+                                </td>
+                            </template>
+                        </tr>
+
+                        <tr class="bg-white hover:bg-slate-50 border-b border-slate-100">
+                            <td class="p-1 text-center font-black text-slate-400 border-r border-slate-200 text-xs">L1</td>
+                            <td class="p-0 border-r border-slate-200 w-[32rem] min-w-[32rem]">
+                                <textarea v-model="step.notes.l1" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight"></textarea>
+                            </td>
+                            <template v-for="site in websites" :key="site + '-l1'">
+                                <td class="p-0 border-r border-slate-200 w-12">
+                                    <select v-model="step.data[site].l1" :class="{'bg-red-50 text-red-700': isErrorJourneyL0(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-100 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
                                 </td>
-                                <td class="p-1 bg-slate-50">
-                                    <select v-model="step.data[site].l2" class="w-full h-8 border border-slate-200 rounded bg-white text-lg outline-none" :class="{'bg-red-50 border-red-300': isError(step.status, step.data[site].l1, step.data[site].l2)}">
+                                <td class="p-0 border-r border-slate-200 text-center w-8 bg-slate-50/30">
+                                    <button @click="step.data[site].l1_eq = !step.data[site].l1_eq" :class="step.data[site].l1_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-100'" class="w-full h-12 text-sm transition-colors">
+                                        ?
+                                    </button>
+                                </td>
+                            </template>
+                        </tr>
+
+                        <tr v-if="showL2" class="bg-white hover:bg-slate-50">
+                            <td class="p-1 text-center font-black text-slate-400 border-r border-slate-200 text-xs">L2</td>
+                            <td class="p-0 border-r border-slate-200 w-[32rem] min-w-[32rem]">
+                                <textarea v-model="step.notes.l2" class="w-full h-12 p-1 text-xs bg-transparent outline-none resize-none overflow-y-auto text-slate-700 leading-tight"></textarea>
+                            </td>
+                            <template v-for="site in websites" :key="site + '-l2'">
+                                <td class="p-0 border-r border-slate-200 w-12">
+                                    <select v-model="step.data[site].l2" :class="{'bg-red-50 text-red-700': isErrorJourneyL1(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-100 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
                                     </select>
+                                </td>
+                                <td class="p-0 border-r border-slate-200 text-center w-8 bg-slate-50/30">
+                                    <button @click="step.data[site].l2_eq = !step.data[site].l2_eq" :class="step.data[site].l2_eq ? 'text-slate-800 font-black' : 'text-slate-300 font-normal hover:text-slate-500 hover:bg-slate-100'" class="w-full h-12 text-sm transition-colors">
+                                        ?
+                                    </button>
                                 </td>
                             </template>
                         </tr>
                     </tbody>
-                </table>
-            </div>
+                    <tbody class="h-3"><tr><td colspan="100%"></td></tr></tbody>
+                </template>
+            </table>
+        </div>
+    </div>
+    
+    <button @click="addJourney" class="w-full py-4 border-2 border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-blue-600 hover:border-blue-400 hover:bg-white uppercase tracking-wider text-sm flex items-center justify-center gap-2 mb-12">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Add New Journey
+    </button>
+
+    <div class="w-full h-px bg-slate-300 my-8"></div>
+
+    <div class="mb-4">
+        <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">Axis Audit</h2>
+    </div>
+
+    <div v-for="(cat, cIndex) in categories" :key="cat.id" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
+        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+            <input v-model="cat.name" class="font-bold text-xl bg-transparent border-none focus:ring-0 p-0 text-slate-800 placeholder-slate-400 w-1/2" placeholder="Category Name...">
+            <button @click="removeCategory(cIndex)" class="px-3 py-1.5 text-xs font-bold bg-white text-red-500 border border-red-200 rounded hover:bg-red-50 transition-colors shadow-sm">Delete Category</button>
         </div>
 
-        <button @click="addJourney" class="w-full py-4 border-2 border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-blue-600 hover:border-blue-400 hover:bg-slate-50 transition-colors uppercase tracking-wider text-sm">
-            + Add New Journey
-        </button>
+        <div class="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
+            <div v-for="level in ['l0', 'l1', 'l2']" :key="level" class="p-4 bg-white flex flex-col h-full" v-show="level !== 'l2' || showL2">
+                <div class="mb-4 pb-2 border-b border-slate-100 flex justify-between items-center">
+                    <h3 class="font-black text-slate-400 uppercase tracking-widest text-sm">{{ level.toUpperCase() }}</h3>
+                </div>
 
+                <div class="flex-grow space-y-2 mb-6 relative">
+                    <transition-group name="list">
+                        <div v-for="(item, iIndex) in cat[level].ranking" :key="item.site">
+
+                            <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg p-2 shadow-sm relative z-0 transition-all hover:border-indigo-300">
+                                
+                                <div class="flex flex-col items-center justify-center shrink-0 w-6 text-slate-400">
+                                    <button 
+                                        @click="moveUp(cIndex, level, iIndex)" 
+                                        :disabled="iIndex === 0 || item.rating !== cat[level].ranking[iIndex-1].rating" 
+                                        class="hover:text-indigo-600 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"></path></svg>
+                                    </button>
+                                    <button 
+                                        @click="moveDown(cIndex, level, iIndex)" 
+                                        :disabled="iIndex === cat[level].ranking.length - 1 || item.rating !== cat[level].ranking[iIndex+1].rating" 
+                                        class="hover:text-indigo-600 disabled:opacity-20 disabled:cursor-not-allowed -mt-1 transition-colors"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                </div>
+                                
+                                <div class="flex-grow font-bold text-slate-700 ml-2 text-lg">
+                                    {{ item.site }}
+                                </div>
+
+                                <button 
+                                    v-if="iIndex > 0 && item.rating === cat[level].ranking[iIndex-1].rating"
+                                    @click="item.tieWithAbove = !item.tieWithAbove" 
+                                    class="w-6 h-6 shrink-0 rounded border bg-white flex items-center justify-center text-xs font-black shadow-sm transition-colors mr-2"
+                                    :class="item.tieWithAbove ? 'border-indigo-400 text-indigo-600 bg-indigo-50' : 'border-slate-200 text-slate-300 hover:text-slate-500 hover:border-slate-300'"
+                                    title="Toggle Tie"
+                                >
+                                    =
+                                </button>
+                                <div v-else class="w-6 h-6 shrink-0 mr-2"></div>
+                                
+                                <div class="flex items-center bg-white border border-slate-200 rounded shrink-0 px-2 shadow-sm">
+                                    <select 
+                                        v-model.number="item.rating" 
+                                        @change="forceSort(cIndex, level)"
+                                        class="py-2 px-1 w-full bg-transparent text-slate-800 font-bold outline-none cursor-pointer appearance-none bg-none"
+                                        style="background-image: none;"
+                                    >
+                                        <option v-for="n in 7" :key="n" :value="n">{{ n }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </transition-group>
+                </div>
+
+                <div class="mt-auto">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Notes</span>
+                    <textarea v-model="cat[level].notes" class="w-full h-24 p-3 bg-slate-50 border border-slate-200 focus:border-indigo-400 rounded-lg outline-none text-sm text-slate-700 resize-none overflow-y-auto"></textarea>
+                </div>
+            </div>
+            
+        </div>
     </div>
+
+    <button @click="addCategory" class="w-full py-6 border-2 border-dashed border-slate-300 rounded-xl text-slate-400 font-bold hover:text-indigo-600 hover:border-indigo-400 hover:bg-white uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Add New Category
+    </button>
+
 </div>
 
 <script>
-    const { createApp, reactive, computed, ref } = Vue;
+    const { createApp, reactive, computed, ref, watch } = Vue;
 
     createApp({
         setup() {
-            const isInitialized = ref(false);
-            const numWebsites = ref(null);
+            const numWebsites = ref(2); 
             const websites = reactive([]);
+            const showL2 = ref(true);
+
+            // ============================
+            // JOURNEY LOGIC
+            // ============================
             const journeys = reactive([]);
 
-            const initializeData = () => {
-                const count = parseInt(numWebsites.value);
-                for(let i = 0; i < count; i++) {
-                    websites.push('W' + String.fromCharCode(65 + i)); // WA, WB, WC...
-                }
-                addJourney();
-                isInitialized.value = true;
-            };
-
-            const generateSiteData = () => {
+            const generateJourneySiteData = (siteList) => {
                 const data = {};
-                websites.forEach(site => {
-                    data[site] = { l0: '', l1: '', l2: '' };
+                siteList.forEach(site => {
+                    data[site] = { l0: '', l1: '', l2: '', l0_eq: false, l1_eq: false, l2_eq: false };
                 });
                 return data;
+            };
+
+            const generateJourneyNotesData = () => {
+                return { l0: '', l1: '', l2: '' };
             };
 
             const addJourney = () => {
@@ -175,56 +355,238 @@
                     id: Date.now(),
                     name: `Journey ${journeys.length + 1}`,
                     steps: [
-                        { id: Date.now() + 1, stepText: '', reasoningText: '', status: '', data: generateSiteData() }
+                        { id: Date.now() + 1, stepText: '', notes: generateJourneyNotesData(), data: generateJourneySiteData(websites) }
                     ]
                 });
             };
 
             const addStep = (jIndex) => {
                 journeys[jIndex].steps.push({
-                    id: Date.now(),
-                    stepText: '',
-                    reasoningText: '',
-                    status: '',
-                    data: generateSiteData()
+                    id: Date.now(), stepText: '', notes: generateJourneyNotesData(), data: generateJourneySiteData(websites)
                 });
             };
 
-            const isError = (status, colA, colB) => {
-                if (status !== 'Incorrect') return false;
-                if (colA === '' || colB === '') return false; // Ignore if incomplete
-                return colA !== colB;
+            const removeJourney = (jIndex) => { if(confirm("Delete this entire journey?")) journeys.splice(jIndex, 1); };
+            const removeStep = (jIndex, sIndex) => { if(confirm("Delete this step?")) journeys[jIndex].steps.splice(sIndex, 1); };
+
+            const isErrorJourneyL0 = (siteData) => {
+                if (siteData.l0 === '' || siteData.l1 === '') return false;
+                if (siteData.l1_eq) return false; 
+                return siteData.l0 !== siteData.l1;
             };
 
-            const calculateScore = (colA_key, colB_key) => {
-                let totalSteps = 0;
-                let errors = 0;
+            const isErrorJourneyL1 = (siteData) => {
+                if (siteData.l1 === '' || siteData.l2 === '') return false;
+                if (siteData.l2_eq) return false; 
+                return siteData.l1 !== siteData.l2;
+            };
 
-                journeys.forEach(journey => {
-                    totalSteps += journey.steps.length;
-                    journey.steps.forEach(step => {
+            const journeyStats = computed(() => {
+                let l0_valid = 0, l0_errors = 0;
+                let l1_valid = 0, l1_errors = 0;
+
+                journeys.forEach(j => {
+                    j.steps.forEach(s => {
                         websites.forEach(site => {
-                            if (isError(step.status, step.data[site][colA_key], step.data[site][colB_key])) {
-                                errors++;
+                            const d = s.data[site];
+                            if (d && d.l0 !== '' && d.l1 !== '') {
+                                l0_valid++;
+                                if (isErrorJourneyL0(d)) l0_errors++;
+                            }
+                            if (d && d.l1 !== '' && d.l2 !== '') {
+                                l1_valid++;
+                                if (isErrorJourneyL1(d)) l1_errors++;
                             }
                         });
                     });
                 });
 
-                const denominator = totalSteps * websites.length;
-                if (denominator === 0) return 0;
-                
-                const numerator = denominator - errors;
-                return ((numerator / denominator) * 100).toFixed(1);
+                return {
+                    l0: { num: l0_valid - l0_errors, den: l0_valid },
+                    l1: { num: l1_valid - l1_errors, den: l1_valid }
+                };
+            });
+
+            // ============================
+            // AXIS LOGIC
+            // ============================
+            const categories = reactive([]);
+
+            const generateAxisRankingList = (sites) => {
+                return sites.map(site => ({ site: site, rating: 1, tieWithAbove: false }));
             };
 
-            const getL0Score = computed(() => calculateScore('l0', 'l1'));
-            const getL1Score = computed(() => calculateScore('l1', 'l2'));
+            const addCategory = () => {
+                categories.push({
+                    id: Date.now(), name: '',
+                    l0: { notes: '', ranking: generateAxisRankingList(websites) },
+                    l1: { notes: '', ranking: generateAxisRankingList(websites) },
+                    l2: { notes: '', ranking: generateAxisRankingList(websites) }
+                });
+            };
+
+            const removeCategory = (cIndex) => { if(confirm("Delete this category?")) categories.splice(cIndex, 1); };
+
+            const updateTies = (arr) => {
+                for(let i=0; i<arr.length; i++) {
+                    if (i === 0 || arr[i].rating !== arr[i-1].rating) {
+                        arr[i].tieWithAbove = false;
+                    }
+                }
+            };
+
+            const forceSort = (cIndex, level) => {
+                const arr = categories[cIndex][level].ranking;
+                arr.sort((a, b) => b.rating - a.rating);
+                updateTies(arr);
+            };
+
+            const moveUp = (cIndex, level, iIndex) => {
+                const arr = categories[cIndex][level].ranking;
+                if (iIndex > 0 && arr[iIndex].rating === arr[iIndex - 1].rating) {
+                    const temp = arr[iIndex];
+                    arr[iIndex] = arr[iIndex - 1];
+                    arr[iIndex - 1] = temp;
+                    updateTies(arr);
+                }
+            };
+
+            const moveDown = (cIndex, level, iIndex) => {
+                const arr = categories[cIndex][level].ranking;
+                if (iIndex < arr.length - 1 && arr[iIndex].rating === arr[iIndex + 1].rating) {
+                    const temp = arr[iIndex];
+                    arr[iIndex] = arr[iIndex + 1];
+                    arr[iIndex + 1] = temp;
+                    updateTies(arr);
+                }
+            };
+
+            const computeRanksAndRatings = (rankingArray) => {
+                const ranks = {};
+                const ratings = {};
+                let currentRank = 1;
+
+                for(let i=0; i<rankingArray.length; i++) {
+                    const item = rankingArray[i];
+                    ratings[item.site] = item.rating;
+
+                    if (i > 0 && item.rating === rankingArray[i-1].rating && item.tieWithAbove) {
+                        ranks[item.site] = currentRank; 
+                    } else {
+                        currentRank = i + 1; 
+                        ranks[item.site] = currentRank;
+                    }
+                }
+                return { ranks, ratings };
+            };
+
+            const calculateAxisRawScores = (levelA, levelB) => {
+                if (categories.length === 0) return { strictNum: 0, entailNum: 0, den: 0 };
+
+                const N = websites.length;
+                if (N < 2) return { strictNum: 0, entailNum: 0, den: 0 };
+
+                const maxRatingDiff = 6 * N; 
+                const maxKT = (N * (N - 1)) / 2;
+                const maxScorePerCategory = maxRatingDiff + maxKT;
+                
+                const totalDenominator = maxScorePerCategory * categories.length;
+                
+                let strictNumerator = totalDenominator;
+                let entailNumerator = totalDenominator;
+
+                categories.forEach(cat => {
+                    const dataA = computeRanksAndRatings(cat[levelA].ranking);
+                    const dataB = computeRanksAndRatings(cat[levelB].ranking);
+
+                    websites.forEach(site => {
+                        const diff = Math.abs(dataA.ratings[site] - dataB.ratings[site]);
+                        strictNumerator -= diff;
+                        entailNumerator -= diff;
+                    });
+
+                    for (let i = 0; i < N; i++) {
+                        for (let j = i + 1; j < N; j++) {
+                            const siteX = websites[i];
+                            const siteY = websites[j];
+
+                            const relA = Math.sign(dataA.ranks[siteY] - dataA.ranks[siteX]);
+                            const relB = Math.sign(dataB.ranks[siteY] - dataB.ranks[siteX]);
+
+                            if (relA !== relB) {
+                                strictNumerator -= 1;
+                                if (dataB.ratings[siteX] === dataB.ratings[siteY]) {
+                                    entailNumerator -= 1;
+                                }
+                            }
+                        }
+                    }
+                });
+
+                return { strictNum: strictNumerator, entailNum: entailNumerator, den: totalDenominator };
+            };
+
+            const axisStats = computed(() => {
+                return {
+                    l0: calculateAxisRawScores('l0', 'l1'),
+                    l1: calculateAxisRawScores('l1', 'l2')
+                };
+            });
+
+            // ============================
+            // GLOBAL LOGIC
+            // ============================
+            const resetAll = () => {
+                if(confirm("DANGER: Wipe all data and reset?")) location.reload();
+            };
+
+            watch(numWebsites, (newVal) => {
+                const count = Math.min(Math.max(parseInt(newVal) || 2, 2), 26);
+                const newWebsites = [];
+                for (let i = 0; i < count; i++) {
+                    newWebsites.push('W' + String.fromCharCode(65 + i));
+                }
+                
+                // Sync Journey
+                journeys.forEach(j => {
+                    j.steps.forEach(s => {
+                        newWebsites.forEach(site => {
+                            if (!s.data[site]) {
+                                s.data[site] = { l0: '', l1: '', l2: '', l0_eq: false, l1_eq: false, l2_eq: false };
+                            }
+                        });
+                    });
+                });
+
+                // Sync Axis
+                categories.forEach(cat => {
+                    ['l0', 'l1', 'l2'].forEach(level => {
+                        const currentRank = cat[level].ranking;
+                        for (let i = currentRank.length - 1; i >= 0; i--) {
+                            if (!newWebsites.includes(currentRank[i].site)) currentRank.splice(i, 1);
+                        }
+                        newWebsites.forEach(site => {
+                            if (!currentRank.find(r => r.site === site)) currentRank.push({ site: site, rating: 1, tieWithAbove: false });
+                        });
+                        forceSort(categories.indexOf(cat), level);
+                    });
+                });
+                
+                websites.splice(0, websites.length, ...newWebsites);
+                if (journeys.length === 0) addJourney();
+                if (categories.length === 0) addCategory();
+            }, { immediate: true });
+
+            const formatPct = (num, den) => {
+                if (den === 0) return '--';
+                return ((num / den) * 100).toFixed(1);
+            };
 
             return {
-                isInitialized, numWebsites, websites, journeys,
-                initializeData, addJourney, addStep, isError,
-                getL0Score, getL1Score
+                numWebsites, showL2, websites,
+                journeys, addJourney, addStep, removeJourney, removeStep, isErrorJourneyL0, isErrorJourneyL1,
+                categories, addCategory, removeCategory, moveUp, moveDown, forceSort,
+                resetAll, journeyStats, axisStats, formatPct
             };
         }
     }).mount('#app');
