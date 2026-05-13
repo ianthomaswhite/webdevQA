@@ -23,31 +23,13 @@
 <div id="app" class="max-w-[1600px] mx-auto space-y-8">
 
     <header class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col gap-6">
-        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6">
-            <div class="max-w-3xl">
+        <div class="flex flex-col items-start gap-4">
+            <div>
                 <h1 class="text-3xl font-bold text-slate-800 tracking-tight">Audit Dashboard</h1>
-                <p class="text-slate-500 mt-1 mb-4">Journey steps & Axis ranking alignment</p>
-                
-                <div class="text-xs text-slate-600 bg-slate-50 p-3 rounded border border-slate-200 leading-relaxed grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <strong class="text-slate-800">Old:</strong><br>
-                        <em>Journey:</em> 1 deduction per website per journey with any diff.<br>
-                        <em>Axis:</em> Starts at 7. Deducts for changes >1 (or exactly 1-2 & 6-7). Floor of 1.
-                    </div>
-                    <div>
-                        <strong class="text-slate-800">New 1:</strong><br>
-                        <em>Journey:</em> Deducts for any pass/fail diff.<br>
-                        <em>Axis:</em> Deducts for every rating difference & relative ranking flip.
-                    </div>
-                    <div>
-                        <strong class="text-slate-800">New 2:</strong><br>
-                        <em>Journey:</em> Waives deduction if target is "?".<br>
-                        <em>Axis:</em> Waives rank deductions if mathematically forced or explicitly tied (=).
-                    </div>
-                </div>
+                <p class="text-slate-500 mt-1">Journey steps & Axis ranking alignment</p>
             </div>
             
-            <div class="flex flex-wrap items-center gap-4 shrink-0">
+            <div class="flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-3 bg-slate-50 p-2 rounded border border-slate-200">
                     <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Websites:</label>
                     <input 
@@ -71,7 +53,7 @@
 
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 overflow-x-auto pb-2">
             
-            <div class="bg-white border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col justify-between min-w-max">
+            <div class="bg-white border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col justify-between min-w-[320px]">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Journey Score</div>
                 
                 <div class="flex gap-6 w-full justify-center mb-6">
@@ -128,14 +110,14 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-center mt-auto pt-4 border-t border-slate-200 leading-relaxed">
-                    <strong class="text-slate-800">Old:</strong> 1 ded. per site/journey with any diff.<br>
-                    <strong class="text-slate-800">New 1:</strong> Deducts for any pass/fail diff.<br>
-                    <strong class="text-slate-800">New 2:</strong> Waives deduction if target is "?".
+                <div class="text-[10px] text-slate-500 text-left mt-auto pt-4 border-t border-slate-200 leading-relaxed">
+                    <strong class="text-slate-800">Old:</strong> One deduction per website per journey if any steps differ, regardless of how many steps differ.<br>
+                    <strong class="text-slate-800">New 1 (Strict):</strong> Deducts exactly one point for every individual step that contains a pass/fail difference between levels.<br>
+                    <strong class="text-slate-800">New 2 (Lenient):</strong> The same as New 1 except it waives the deduction if the target level is explicitly marked "?".
                 </div>
             </div>
 
-            <div class="bg-white border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col justify-between min-w-max">
+            <div class="bg-white border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col justify-between min-w-[320px]">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Axis Score</div>
                 
                 <div class="flex gap-6 w-full justify-center mb-6">
@@ -192,14 +174,14 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-center mt-auto pt-4 border-t border-slate-200 leading-relaxed">
-                    <strong class="text-slate-800">Old:</strong> Base 7. Deducts for changes >1.<br>
-                    <strong class="text-slate-800">New 1:</strong> Deducts for rating diffs & flips.<br>
-                    <strong class="text-slate-800">New 2:</strong> Waives forced/tied flips.
+                <div class="text-[10px] text-slate-500 text-left mt-auto pt-4 border-t border-slate-200 leading-relaxed">
+                    <strong class="text-slate-800">Old:</strong> Starts at 7 globally. Deducts per category based on changes >1 (or exactly 1-2/6-7): 1-2 changes = 1 deduction, 3+ changes = 2 deductions. Floor of 1.<br>
+                    <strong class="text-slate-800">New 1 (Strict):</strong> Deducts exactly one point for every unit of absolute rating difference between levels. Additionally, deducts exactly one point for every relative ranking flip between any pair of websites.<br>
+                    <strong class="text-slate-800">New 2 (Lenient):</strong> The same as New 1 except ranking flip deductions are waived if the flip was mathematically forced by the new ratings or if the websites are tied ("=").
                 </div>
             </div>
 
-            <div class="bg-slate-50 border border-slate-200 shadow-inner p-5 rounded-xl flex flex-col justify-between min-w-max">
+            <div class="bg-slate-50 border border-slate-200 shadow-inner p-5 rounded-xl flex flex-col justify-between min-w-[320px]">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">Total Combined Score</div>
                 
                 <div class="flex gap-6 w-full justify-center mb-6">
@@ -256,9 +238,9 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-center mt-auto pt-4 border-t border-slate-200 leading-relaxed">
-                    <strong class="text-slate-800">Old:</strong> Journey /7 minus Axis Deductions.<br>
-                    <strong class="text-slate-800">New 1/2:</strong> Combined global numerators<br>& denominators.
+                <div class="text-[10px] text-slate-500 text-left mt-auto pt-4 border-t border-slate-200 leading-relaxed">
+                    <strong class="text-slate-800">Old:</strong> The Journey score out of 7 minus the total global Axis deductions. Floor of 1.<br>
+                    <strong class="text-slate-800">New 1 & 2:</strong> The aggregated sum of the Journey score numerator and Axis score numerator, divided by the aggregated sum of their respective denominators.
                 </div>
             </div>
 
