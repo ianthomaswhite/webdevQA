@@ -49,12 +49,12 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 items-stretch">
             
             <div class="bg-slate-50 border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col h-full">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">JOURNEY SCORE</div>
                 
-                <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
+                <div class="flex gap-4 w-full justify-center mb-6">
                     <div class="w-1/2 flex flex-col gap-3">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L0</div>
                         
@@ -85,8 +85,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="w-px bg-slate-200"></div>
                     
                     <div class="w-1/2 flex flex-col gap-3" :class="showL2 ? '' : 'opacity-30 grayscale'">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L1</div>
@@ -120,17 +118,17 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto normal-case">
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> One deduction per website per journey if any steps differ, regardless of how many steps differ.</div>
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> Deducts exactly one point for every individual step that contains a pass/fail difference between levels.</div>
-                    <div><strong class="text-slate-800 uppercase">New 2:</strong> The same as New 1 except it waives the deduction if the target level is explicitly marked "?".</div>
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto normal-case h-36 flex flex-col justify-start">
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">OLD:</strong> One deduction per website per journey if any steps differ, regardless of how many steps differ.</div>
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">NEW 1:</strong> Deducts exactly one point for every individual step that contains a pass/fail difference between levels.</div>
+                    <div><strong class="text-slate-800 uppercase">NEW 2:</strong> The same as New 1 except it waives the deduction if the target level is explicitly marked "?".</div>
                 </div>
             </div>
 
             <div class="bg-slate-50 border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col h-full">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">AXIS SCORE</div>
                 
-                <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
+                <div class="flex gap-4 w-full justify-center mb-6">
                     <div class="w-1/2 flex flex-col gap-3">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L0</div>
                         
@@ -161,8 +159,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="w-px bg-slate-200"></div>
 
                     <div class="w-1/2 flex flex-col gap-3" :class="showL2 ? '' : 'opacity-30 grayscale'">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L1</div>
@@ -196,17 +192,17 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto normal-case">
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> Starts at 7 globally. Deducts per category based on changes >1 (or exactly 1-2/6-7): 1-2 changes = 1 deduction, 3+ changes = 2 deductions. Floor of 1.</div>
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> Deducts exactly one point for every unit of absolute rating difference between levels. Additionally, deducts exactly one point for every relative ranking flip between any pair of websites.</div>
-                    <div><strong class="text-slate-800 uppercase">New 2:</strong> The same as New 1 except ranking flip deductions are waived if the flip was mathematically forced by the new ratings or if the websites are tied ("=").</div>
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto normal-case h-36 flex flex-col justify-start">
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">OLD:</strong> Starts at 7 globally. Deducts per category based on changes >1 (or exactly 1-2/6-7): 1-2 changes = 1 deduction, 3+ changes = 2 deductions. Floor of 1.</div>
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">NEW 1:</strong> Deducts 1 pt per unit of rating difference, and 1 pt for every relative ranking flip between sites.</div>
+                    <div><strong class="text-slate-800 uppercase">NEW 2:</strong> The same as New 1 except ranking flip deductions are waived if the flip was mathematically forced by the new ratings or if the websites are tied ("=").</div>
                 </div>
             </div>
 
             <div class="bg-slate-50 border border-slate-200 shadow-sm p-5 rounded-xl flex flex-col h-full">
                 <div class="text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 text-center">TOTAL COMBINED SCORE</div>
                 
-                <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
+                <div class="flex gap-4 w-full justify-center mb-6">
                     <div class="w-1/2 flex flex-col gap-3">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L0</div>
                         
@@ -237,8 +233,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="w-px bg-slate-200"></div>
 
                     <div class="w-1/2 flex flex-col gap-3" :class="showL2 ? '' : 'opacity-30 grayscale'">
                         <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L1</div>
@@ -272,10 +266,10 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto normal-case">
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> The Journey score out of 7 minus the total global Axis deductions. Floor of 1.</div>
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
-                    <div><strong class="text-slate-800 uppercase">New 2:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto normal-case h-36 flex flex-col justify-start">
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">OLD:</strong> The Journey score out of 7 minus the total global Axis deductions. Floor of 1.</div>
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">NEW 1:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
+                    <div><strong class="text-slate-800 uppercase">NEW 2:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
                 </div>
             </div>
 
@@ -309,7 +303,7 @@
                             <template v-for="site in websites" :key="site">
                                 <td colspan="2" class="p-1 text-center font-bold text-sm border-r border-slate-200">{{ site }}</td>
                             </template>
-                            <td :rowspan="showL2 ? 5 : 4" class="w-10 bg-white align-middle text-center">
+                            <td :rowspan="showL2 ? 5 : 4" class="w-10 bg-slate-50 align-middle text-center">
                                 <button @click="removeStep(jIndex, sIndex)" class="text-slate-400 hover:text-red-600" title="DELETE STEP">
                                     <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
@@ -353,7 +347,7 @@
                             </td>
                             <template v-for="site in websites" :key="site + '-l1'">
                                 <td class="p-0 border-r border-slate-200 w-12">
-                                    <select v-model="step.data[site].l1" :class="{'bg-red-50 text-red-700': isLenientErrorJourneyL0(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-50 focus:bg-white text-center">
+                                    <select v-model="step.data[site].l1" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-50 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
@@ -374,7 +368,7 @@
                             </td>
                             <template v-for="site in websites" :key="site + '-l2'">
                                 <td class="p-0 border-r border-slate-200 w-12">
-                                    <select v-model="step.data[site].l2" :class="{'bg-red-50 text-red-700': isLenientErrorJourneyL1(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-50 focus:bg-white text-center">
+                                    <select v-model="step.data[site].l2" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-50 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
@@ -525,18 +519,6 @@
 
             const removeJourney = (jIndex) => { if(confirm("DELETE THIS ENTIRE JOURNEY?")) journeys.splice(jIndex, 1); };
             const removeStep = (jIndex, sIndex) => { if(confirm("DELETE THIS STEP?")) journeys[jIndex].steps.splice(sIndex, 1); };
-
-            const isLenientErrorJourneyL0 = (siteData) => {
-                if (siteData.l0 === '' || siteData.l1 === '') return false;
-                if (siteData.l1_eq) return false; 
-                return siteData.l0 !== siteData.l1;
-            };
-
-            const isLenientErrorJourneyL1 = (siteData) => {
-                if (siteData.l1 === '' || siteData.l2 === '') return false;
-                if (siteData.l2_eq) return false; 
-                return siteData.l1 !== siteData.l2;
-            };
 
             const journeyStats = computed(() => {
                 let l0_stepDen = 0, l0_strictErr = 0, l0_lenientErr = 0;
