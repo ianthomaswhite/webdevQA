@@ -56,59 +56,69 @@
                 
                 <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L0</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ formatPct(journeyStats.l0.origNum, journeyStats.l0.origDen) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(journeyStats.l0.origNum, journeyStats.l0.origDen) }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-indigo-400 w-16 text-right">{{ journeyStats.l0.incomplete ? '--' : formatPct(journeyStats.l0.origNum, journeyStats.l0.origDen) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-indigo-600 w-12 text-left">{{ journeyStats.l0.incomplete ? '--' : formatOut7(journeyStats.l0.origNum, journeyStats.l0.origDen) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ formatPct(journeyStats.l0.strictNum, journeyStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(journeyStats.l0.strictNum, journeyStats.l0.den) }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-indigo-400 w-16 text-right">{{ journeyStats.l0.incomplete ? '--' : formatPct(journeyStats.l0.strictNum, journeyStats.l0.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-indigo-600 w-12 text-left">{{ journeyStats.l0.incomplete ? '--' : formatOut7(journeyStats.l0.strictNum, journeyStats.l0.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ formatPct(journeyStats.l0.entailNum, journeyStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(journeyStats.l0.entailNum, journeyStats.l0.den) }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-indigo-400 w-16 text-right">{{ journeyStats.l0.incomplete ? '--' : formatPct(journeyStats.l0.entailNum, journeyStats.l0.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-indigo-600 w-12 text-left">{{ journeyStats.l0.incomplete ? '--' : formatOut7(journeyStats.l0.entailNum, journeyStats.l0.den) }}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="w-px bg-slate-200"></div>
-                    
                     <div class="w-1/2 flex flex-col gap-3" :class="showL2 ? '' : 'opacity-30 grayscale'">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L1</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L1</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ showL2 ? formatPct(journeyStats.l1.origNum, journeyStats.l1.origDen) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(journeyStats.l1.origNum, journeyStats.l1.origDen) : '--' }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-emerald-400 w-16 text-right">{{ (!showL2 || journeyStats.l1.incomplete) ? '--' : formatPct(journeyStats.l1.origNum, journeyStats.l1.origDen) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || journeyStats.l1.incomplete) ? '--' : formatOut7(journeyStats.l1.origNum, journeyStats.l1.origDen) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ showL2 ? formatPct(journeyStats.l1.strictNum, journeyStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(journeyStats.l1.strictNum, journeyStats.l1.den) : '--' }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-emerald-400 w-16 text-right">{{ (!showL2 || journeyStats.l1.incomplete) ? '--' : formatPct(journeyStats.l1.strictNum, journeyStats.l1.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || journeyStats.l1.incomplete) ? '--' : formatOut7(journeyStats.l1.strictNum, journeyStats.l1.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ showL2 ? formatPct(journeyStats.l1.entailNum, journeyStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(journeyStats.l1.entailNum, journeyStats.l1.den) : '--' }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-emerald-400 w-16 text-right">{{ (!showL2 || journeyStats.l1.incomplete) ? '--' : formatPct(journeyStats.l1.entailNum, journeyStats.l1.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || journeyStats.l1.incomplete) ? '--' : formatOut7(journeyStats.l1.entailNum, journeyStats.l1.den) }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-36 normal-case mt-auto">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-hidden mt-auto normal-case">
                     <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> One deduction per website per journey if any steps differ, regardless of how many steps differ.</div>
                     <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> Deducts exactly one point for every individual step that contains a pass/fail difference between levels.</div>
                     <div><strong class="text-slate-800 uppercase">New 2:</strong> The same as New 1 except it waives the deduction if the target level is explicitly marked "?".</div>
@@ -120,61 +130,71 @@
                 
                 <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L0</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">--</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOrigAxisScore(axisStats.l0.origDed, axisStats.l0.den) }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-indigo-400 w-16 text-right">--</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-indigo-600 w-12 text-left">{{ axisStats.l0.incomplete ? '--' : formatOrigAxisScore(axisStats.l0.origDed, axisStats.l0.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ formatPct(axisStats.l0.strictNum, axisStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(axisStats.l0.strictNum, axisStats.l0.den) }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-indigo-400 w-16 text-right">{{ axisStats.l0.incomplete ? '--' : formatPct(axisStats.l0.strictNum, axisStats.l0.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-indigo-600 w-12 text-left">{{ axisStats.l0.incomplete ? '--' : formatOut7(axisStats.l0.strictNum, axisStats.l0.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ formatPct(axisStats.l0.entailNum, axisStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(axisStats.l0.entailNum, axisStats.l0.den) }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-indigo-400 w-16 text-right">{{ axisStats.l0.incomplete ? '--' : formatPct(axisStats.l0.entailNum, axisStats.l0.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-indigo-600 w-12 text-left">{{ axisStats.l0.incomplete ? '--' : formatOut7(axisStats.l0.entailNum, axisStats.l0.den) }}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="w-px bg-slate-200"></div>
-
                     <div class="w-1/2 flex flex-col gap-3" :class="showL2 ? '' : 'opacity-30 grayscale'">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L1</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L1</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">--</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOrigAxisScore(axisStats.l1.origDed, axisStats.l1.den) : '--' }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-emerald-400 w-16 text-right">--</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatOrigAxisScore(axisStats.l1.origDed, axisStats.l1.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ showL2 ? formatPct(axisStats.l1.strictNum, axisStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(axisStats.l1.strictNum, axisStats.l1.den) : '--' }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-emerald-400 w-16 text-right">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatPct(axisStats.l1.strictNum, axisStats.l1.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatOut7(axisStats.l1.strictNum, axisStats.l1.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ showL2 ? formatPct(axisStats.l1.entailNum, axisStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(axisStats.l1.entailNum, axisStats.l1.den) : '--' }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-emerald-400 w-16 text-right">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatPct(axisStats.l1.entailNum, axisStats.l1.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatOut7(axisStats.l1.entailNum, axisStats.l1.den) }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-36 normal-case mt-auto">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-hidden mt-auto normal-case">
                     <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> Starts at 7 globally. Deducts per category based on changes >1 (or exactly 1-2/6-7): 1-2 changes = 1 deduction, 3+ changes = 2 deductions. Floor of 1.</div>
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> Deducts 1 pt per unit of rating difference, and 1 pt for every relative ranking flip between sites.</div>
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> Deducts exactly one point for every unit of absolute rating difference between levels. Additionally, deducts exactly one point for every relative ranking flip between any pair of websites.</div>
                     <div><strong class="text-slate-800 uppercase">New 2:</strong> The same as New 1 except ranking flip deductions are waived if the flip was mathematically forced by the new ratings or if the websites are tied ("=").</div>
                 </div>
             </div>
@@ -184,59 +204,69 @@
                 
                 <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L0</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">--</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOrigOverallScore(journeyStats.l0.origNum, journeyStats.l0.origDen, axisStats.l0.origDed, axisStats.l0.den) }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-indigo-400 w-16 text-right">--</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-indigo-600 w-12 text-left">{{ (journeyStats.l0.incomplete || axisStats.l0.incomplete) ? '--' : formatOrigOverallScore(journeyStats.l0.origNum, journeyStats.l0.origDen, axisStats.l0.origDed, axisStats.l0.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ formatPct(journeyStats.l0.strictNum + axisStats.l0.strictNum, journeyStats.l0.den + axisStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(journeyStats.l0.strictNum + axisStats.l0.strictNum, journeyStats.l0.den + axisStats.l0.den) }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-indigo-400 w-16 text-right">{{ (journeyStats.l0.incomplete || axisStats.l0.incomplete) ? '--' : formatPct(journeyStats.l0.strictNum + axisStats.l0.strictNum, journeyStats.l0.den + axisStats.l0.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-indigo-600 w-12 text-left">{{ (journeyStats.l0.incomplete || axisStats.l0.incomplete) ? '--' : formatOut7(journeyStats.l0.strictNum + axisStats.l0.strictNum, journeyStats.l0.den + axisStats.l0.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ formatPct(journeyStats.l0.entailNum + axisStats.l0.entailNum, journeyStats.l0.den + axisStats.l0.den) }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ formatOut7(journeyStats.l0.entailNum + axisStats.l0.entailNum, journeyStats.l0.den + axisStats.l0.den) }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-indigo-400 w-16 text-right">{{ (journeyStats.l0.incomplete || axisStats.l0.incomplete) ? '--' : formatPct(journeyStats.l0.entailNum + axisStats.l0.entailNum, journeyStats.l0.den + axisStats.l0.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-indigo-600 w-12 text-left">{{ (journeyStats.l0.incomplete || axisStats.l0.incomplete) ? '--' : formatOut7(journeyStats.l0.entailNum + axisStats.l0.entailNum, journeyStats.l0.den + axisStats.l0.den) }}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="w-px bg-slate-200"></div>
-
                     <div class="w-1/2 flex flex-col gap-3" :class="showL2 ? '' : 'opacity-30 grayscale'">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L1</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L1</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">--</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOrigOverallScore(journeyStats.l1.origNum, journeyStats.l1.origDen, axisStats.l1.origDed, axisStats.l1.den) : '--' }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-emerald-400 w-16 text-right">--</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || journeyStats.l1.incomplete || axisStats.l1.incomplete) ? '--' : formatOrigOverallScore(journeyStats.l1.origNum, journeyStats.l1.origDen, axisStats.l1.origDed, axisStats.l1.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ showL2 ? formatPct(journeyStats.l1.strictNum + axisStats.l1.strictNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(journeyStats.l1.strictNum + axisStats.l1.strictNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-emerald-400 w-16 text-right">{{ (!showL2 || journeyStats.l1.incomplete || axisStats.l1.incomplete) ? '--' : formatPct(journeyStats.l1.strictNum + axisStats.l1.strictNum, journeyStats.l1.den + axisStats.l1.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || journeyStats.l1.incomplete || axisStats.l1.incomplete) ? '--' : formatOut7(journeyStats.l1.strictNum + axisStats.l1.strictNum, journeyStats.l1.den + axisStats.l1.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
-                            <div class="font-mono text-base font-black">
-                                <span class="text-indigo-400">{{ showL2 ? formatPct(journeyStats.l1.entailNum + axisStats.l1.entailNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span> <span class="text-slate-300 font-normal mx-1">|</span> <span class="text-indigo-600">{{ showL2 ? formatOut7(journeyStats.l1.entailNum + axisStats.l1.entailNum, journeyStats.l1.den + axisStats.l1.den) : '--' }}</span>
+                            <div class="flex items-center font-mono text-base font-black">
+                                <span class="text-emerald-400 w-16 text-right">{{ (!showL2 || journeyStats.l1.incomplete || axisStats.l1.incomplete) ? '--' : formatPct(journeyStats.l1.entailNum + axisStats.l1.entailNum, journeyStats.l1.den + axisStats.l1.den) }}</span>
+                                <span class="text-slate-300 font-normal mx-2">|</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || journeyStats.l1.incomplete || axisStats.l1.incomplete) ? '--' : formatOut7(journeyStats.l1.entailNum + axisStats.l1.entailNum, journeyStats.l1.den + axisStats.l1.den) }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-36 normal-case mt-auto">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] overflow-hidden mt-auto normal-case">
                     <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> The Journey score out of 7 minus the total global Axis deductions. Floor of 1.</div>
                     <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
                     <div><strong class="text-slate-800 uppercase">New 2:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
@@ -377,7 +407,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 pt-4">
             <div v-for="level in ['l0', 'l1', 'l2']" :key="level" class="px-4 bg-white flex flex-col h-full" v-show="level !== 'l2' || showL2">
-                <div class="mb-4 pb-2 border-b border-slate-100 flex justify-between items-center">
+                <div class="mb-4 flex justify-between items-center">
                     <h3 class="font-black text-slate-400 uppercase tracking-widest text-sm">{{ level.toUpperCase() }}</h3>
                 </div>
 
@@ -510,6 +540,9 @@
                 let l0_origErr = 0;
                 let l1_origErr = 0;
 
+                let l0_incomplete = false;
+                let l1_incomplete = false;
+
                 journeys.forEach(j => {
                     let j_l0_errors = new Set();
                     let j_l1_errors = new Set();
@@ -517,7 +550,9 @@
                     j.steps.forEach(s => {
                         websites.forEach(site => {
                             const d = s.data[site];
-                            if (d && d.l0 !== '' && d.l1 !== '') {
+                            if (!d || d.l0 === '' || d.l1 === '') {
+                                l0_incomplete = true;
+                            } else {
                                 l0_stepDen++;
                                 if (d.l0 !== d.l1) {
                                     l0_strictErr++;
@@ -525,7 +560,10 @@
                                     j_l0_errors.add(site);
                                 }
                             }
-                            if (d && d.l1 !== '' && d.l2 !== '') {
+
+                            if (!d || d.l1 === '' || d.l2 === '') {
+                                l1_incomplete = true;
+                            } else {
                                 l1_stepDen++;
                                 if (d.l1 !== d.l2) {
                                     l1_strictErr++;
@@ -535,27 +573,35 @@
                             }
                         });
                     });
-                    l0_origErr += j_l0_errors.size;
-                    l1_origErr += j_l1_errors.size;
+                    
+                    if (!l0_incomplete) l0_origErr += j_l0_errors.size;
+                    if (!l1_incomplete) l1_origErr += j_l1_errors.size;
                 });
 
-                let l0_origDen = l0_stepDen > 0 ? (journeys.length * numSites) : 0;
-                let l1_origDen = l1_stepDen > 0 ? (journeys.length * numSites) : 0;
+                if (journeys.length === 0 || journeys.some(j => j.steps.length === 0)) {
+                    l0_incomplete = true;
+                    l1_incomplete = true;
+                }
+
+                let l0_origDen = l0_incomplete ? 0 : (journeys.length * numSites);
+                let l1_origDen = l1_incomplete ? 0 : (journeys.length * numSites);
 
                 return {
                     l0: { 
-                        strictNum: l0_stepDen - l0_strictErr, 
-                        entailNum: l0_stepDen - l0_lenientErr, 
-                        den: l0_stepDen,
-                        origNum: l0_origDen - l0_origErr,
-                        origDen: l0_origDen
+                        strictNum: l0_incomplete ? 0 : l0_stepDen - l0_strictErr, 
+                        entailNum: l0_incomplete ? 0 : l0_stepDen - l0_lenientErr, 
+                        den: l0_incomplete ? 0 : l0_stepDen,
+                        origNum: l0_incomplete ? 0 : l0_origDen - l0_origErr,
+                        origDen: l0_origDen,
+                        incomplete: l0_incomplete
                     },
                     l1: { 
-                        strictNum: l1_stepDen - l1_strictErr, 
-                        entailNum: l1_stepDen - l1_lenientErr, 
-                        den: l1_stepDen,
-                        origNum: l1_origDen - l1_origErr,
-                        origDen: l1_origDen
+                        strictNum: l1_incomplete ? 0 : l1_stepDen - l1_strictErr, 
+                        entailNum: l1_incomplete ? 0 : l1_stepDen - l1_lenientErr, 
+                        den: l1_incomplete ? 0 : l1_stepDen,
+                        origNum: l1_incomplete ? 0 : l1_origDen - l1_origErr,
+                        origDen: l1_origDen,
+                        incomplete: l1_incomplete
                     }
                 };
             });
@@ -628,18 +674,22 @@
             };
 
             const calculateAxisRawScores = (levelA, levelB) => {
-                if (categories.length === 0) return { strictNum: 0, entailNum: 0, den: 0, origDed: 0 };
+                if (categories.length === 0) return { strictNum: 0, entailNum: 0, den: 0, origDed: 0, incomplete: true };
                 const N = websites.length;
-                if (N < 2) return { strictNum: 0, entailNum: 0, den: 0, origDed: 0 };
+                if (N < 2) return { strictNum: 0, entailNum: 0, den: 0, origDed: 0, incomplete: true };
 
                 const maxScorePerCategory = (6 * N) + ((N * (N - 1)) / 2);
                 
                 let totalDenominator = 0, strictNumerator = 0, entailNumerator = 0, origDeductions = 0;
+                let incomplete = false;
 
                 categories.forEach(cat => {
                     const hasEmptyA = cat[levelA].ranking.some(r => r.rating === '');
                     const hasEmptyB = cat[levelB].ranking.some(r => r.rating === '');
-                    if (hasEmptyA || hasEmptyB) return; 
+                    if (hasEmptyA || hasEmptyB) {
+                        incomplete = true;
+                        return;
+                    }
 
                     totalDenominator += maxScorePerCategory;
                     let strictCatScore = maxScorePerCategory;
@@ -692,7 +742,11 @@
                     }
                 });
 
-                return { strictNum: strictNumerator, entailNum: entailNumerator, den: totalDenominator, origDed: origDeductions };
+                if (incomplete || totalDenominator === 0) {
+                    return { strictNum: 0, entailNum: 0, den: 0, origDed: 0, incomplete: true };
+                }
+
+                return { strictNum: strictNumerator, entailNum: entailNumerator, den: totalDenominator, origDed: origDeductions, incomplete: false };
             };
 
             const axisStats = computed(() => {
