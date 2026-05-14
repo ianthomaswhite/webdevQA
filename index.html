@@ -118,7 +118,7 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-32 mt-auto normal-case flex flex-col justify-start">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] mt-auto normal-case flex flex-col justify-start">
                     <div class="mb-1"><strong class="text-slate-800 uppercase">OLD:</strong> One deduction per website per journey if any steps differ, regardless of how many steps differ.</div>
                     <div class="mb-1"><strong class="text-slate-800 uppercase">NEW 1:</strong> Deducts exactly one point for every individual step that contains a pass/fail difference between levels.</div>
                     <div><strong class="text-slate-800 uppercase">NEW 2:</strong> The same as New 1 except it waives the deduction if the target level is explicitly marked "?".</div>
@@ -166,35 +166,35 @@
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
                             <div class="flex items-center font-mono text-base font-black">
-                                <span class="text-indigo-400 w-16 text-right">--</span>
+                                <span class="text-emerald-400 w-16 text-right">--</span>
                                 <span class="text-slate-300 font-normal mx-2">|</span>
-                                <span class="text-indigo-600 w-12 text-left">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatOrigAxisScore(axisStats.l1.origDed, axisStats.l1.den) }}</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatOrigAxisScore(axisStats.l1.origDed, axisStats.l1.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 1</span>
                             <div class="flex items-center font-mono text-base font-black">
-                                <span class="text-indigo-400 w-16 text-right">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatPct(axisStats.l1.strictNum, axisStats.l1.den) }}</span>
+                                <span class="text-emerald-400 w-16 text-right">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatPct(axisStats.l1.strictNum, axisStats.l1.den) }}</span>
                                 <span class="text-slate-300 font-normal mx-2">|</span>
-                                <span class="text-indigo-600 w-12 text-left">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatOut7(axisStats.l1.strictNum, axisStats.l1.den) }}</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatOut7(axisStats.l1.strictNum, axisStats.l1.den) }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">NEW 2</span>
                             <div class="flex items-center font-mono text-base font-black">
-                                <span class="text-indigo-400 w-16 text-right">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatPct(axisStats.l1.entailNum, axisStats.l1.den) }}</span>
+                                <span class="text-emerald-400 w-16 text-right">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatPct(axisStats.l1.entailNum, axisStats.l1.den) }}</span>
                                 <span class="text-slate-300 font-normal mx-2">|</span>
-                                <span class="text-indigo-600 w-12 text-left">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatOut7(axisStats.l1.entailNum, axisStats.l1.den) }}</span>
+                                <span class="text-emerald-600 w-12 text-left">{{ (!showL2 || axisStats.l1.incomplete) ? '--' : formatOut7(axisStats.l1.entailNum, axisStats.l1.den) }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-32 mt-auto normal-case flex flex-col justify-start">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] mt-auto normal-case flex flex-col justify-start">
                     <div class="mb-1"><strong class="text-slate-800 uppercase">OLD:</strong> Starts at 7 globally. Deducts per category based on changes >1 (or exactly 1-2/6-7): 1-2 changes = 1 deduction, 3+ changes = 2 deductions. Floor of 1.</div>
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">NEW 1:</strong> Deducts 1 pt per unit of rating difference, and 1 pt for every relative ranking flip between sites.</div>
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">NEW 1:</strong> Deducts exactly one point for every unit of absolute rating difference between levels. Additionally, deducts exactly one point for every relative ranking flip between any pair of websites.</div>
                     <div><strong class="text-slate-800 uppercase">NEW 2:</strong> The same as New 1 except ranking flip deductions are waived if the flip was mathematically forced by the new ratings or if the websites are tied ("=").</div>
                 </div>
             </div>
@@ -266,7 +266,7 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-32 mt-auto normal-case flex flex-col justify-start">
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-[84px] mt-auto normal-case flex flex-col justify-start">
                     <div class="mb-1"><strong class="text-slate-800 uppercase">OLD:</strong> The Journey score out of 7 minus the total global Axis deductions. Floor of 1.</div>
                     <div class="mb-1"><strong class="text-slate-800 uppercase">NEW 1:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
                     <div><strong class="text-slate-800 uppercase">NEW 2:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
@@ -279,7 +279,7 @@
     <div class="w-full h-px bg-slate-200 my-8"></div>
 
     <div class="mb-4">
-        <h2 class="text-2xl font-black text-slate-800">JOURNEY AUDIT</h2>
+        <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">JOURNEY AUDIT</h2>
     </div>
 
     <div v-for="(journey, jIndex) in journeys" :key="journey.id" class="bg-white mb-10">
@@ -304,7 +304,7 @@
                                 <td colspan="2" class="p-1 text-center font-bold text-sm border-r border-slate-200">{{ site }}</td>
                             </template>
                             <td :rowspan="showL2 ? 5 : 4" class="w-10 bg-white align-middle text-center">
-                                <button @click="removeStep(jIndex, sIndex)" class="text-slate-500 hover:text-red-600" title="DELETE STEP">
+                                <button @click="removeStep(jIndex, sIndex)" class="text-slate-400 hover:text-red-600" title="DELETE STEP">
                                     <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </td>
@@ -347,7 +347,7 @@
                             </td>
                             <template v-for="site in websites" :key="site + '-l1'">
                                 <td class="p-0 border-r border-slate-200 w-12">
-                                    <select v-model="step.data[site].l1" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-50 focus:bg-white text-center">
+                                    <select v-model="step.data[site].l1" :class="{'bg-red-50 text-red-700': isLenientErrorJourneyL0(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-50 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
@@ -368,7 +368,7 @@
                             </td>
                             <template v-for="site in websites" :key="site + '-l2'">
                                 <td class="p-0 border-r border-slate-200 w-12">
-                                    <select v-model="step.data[site].l2" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-50 focus:bg-white text-center">
+                                    <select v-model="step.data[site].l2" :class="{'bg-red-50 text-red-700': isLenientErrorJourneyL1(step.data[site])}" class="w-full h-12 border-none bg-transparent text-sm outline-none hover:bg-slate-50 focus:bg-white text-center">
                                         <option value="" disabled selected></option>
                                         <option value="✅">✅</option>
                                         <option value="❌">❌</option>
@@ -396,7 +396,7 @@
     <div class="w-full h-px bg-slate-200 my-8"></div>
 
     <div class="mb-4">
-        <h2 class="text-2xl font-black text-slate-800">AXIS AUDIT</h2>
+        <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">AXIS AUDIT</h2>
     </div>
 
     <div v-for="(cat, cIndex) in categories" :key="cat.id" class="bg-white mb-10">
@@ -519,6 +519,18 @@
 
             const removeJourney = (jIndex) => { if(confirm("DELETE THIS ENTIRE JOURNEY?")) journeys.splice(jIndex, 1); };
             const removeStep = (jIndex, sIndex) => { if(confirm("DELETE THIS STEP?")) journeys[jIndex].steps.splice(sIndex, 1); };
+
+            const isLenientErrorJourneyL0 = (siteData) => {
+                if (siteData.l0 === '' || siteData.l1 === '') return false;
+                if (siteData.l1_eq) return false; 
+                return siteData.l0 !== siteData.l1;
+            };
+
+            const isLenientErrorJourneyL1 = (siteData) => {
+                if (siteData.l1 === '' || siteData.l2 === '') return false;
+                if (siteData.l2_eq) return false; 
+                return siteData.l1 !== siteData.l2;
+            };
 
             const journeyStats = computed(() => {
                 let l0_stepDen = 0, l0_strictErr = 0, l0_lenientErr = 0;
@@ -716,6 +728,9 @@
                                 if (dataB.ratings[websites[i]] === dataB.ratings[websites[j]]) {
                                     entailCatScore -= 1;
                                 }
+                                if (relA === 0 || relB === 0) {
+                                    origCatChanges++;
+                                }
                             }
                         }
                     }
@@ -803,7 +818,7 @@
 
             return {
                 numWebsites, showL2, websites,
-                journeys, addJourney, addStep, removeJourney, removeStep,
+                journeys, addJourney, addStep, removeJourney, removeStep, isLenientErrorJourneyL0, isLenientErrorJourneyL1,
                 categories, addCategory, removeCategory, moveUp, moveDown, forceSort,
                 resetAll, journeyStats, axisStats, formatPct, formatOut7, formatOrigAxisScore, formatOrigOverallScore
             };
