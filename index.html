@@ -35,7 +35,7 @@
                         min="2" 
                         max="26"
                         v-model="numWebsites" 
-                        class="w-16 p-1 border border-slate-300 rounded focus:ring-2 focus:ring-indigo-500 outline-none text-center font-mono font-bold"
+                        class="w-16 p-1 outline-none text-center font-mono font-bold bg-transparent"
                     >
                 </div>
                 
@@ -56,7 +56,7 @@
                 
                 <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L0</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
@@ -86,10 +86,8 @@
                         </div>
                     </div>
 
-                    <div class="w-px bg-slate-200"></div>
-                    
                     <div class="w-1/2 flex flex-col gap-3" :class="showL2 ? '' : 'opacity-30 grayscale'">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L1</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L1</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
@@ -120,10 +118,10 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto normal-case">
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> One deduction per website per journey if any steps differ, regardless of how many steps differ.</div>
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> Deducts exactly one point for every individual step that contains a pass/fail difference between levels.</div>
-                    <div><strong class="text-slate-800 uppercase">New 2:</strong> The same as New 1 except it waives the deduction if the target level is explicitly marked "?".</div>
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-32 mt-auto normal-case flex flex-col justify-start">
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">OLD:</strong> One deduction per website per journey if any steps differ, regardless of how many steps differ.</div>
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">NEW 1:</strong> Deducts exactly one point for every individual step that contains a pass/fail difference between levels.</div>
+                    <div><strong class="text-slate-800 uppercase">NEW 2:</strong> The same as New 1 except it waives the deduction if the target level is explicitly marked "?".</div>
                 </div>
             </div>
 
@@ -132,7 +130,7 @@
                 
                 <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L0</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
@@ -162,10 +160,8 @@
                         </div>
                     </div>
 
-                    <div class="w-px bg-slate-200"></div>
-
                     <div class="w-1/2 flex flex-col gap-3" :class="showL2 ? '' : 'opacity-30 grayscale'">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L1</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L1</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
@@ -196,10 +192,10 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto normal-case">
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> Starts at 7 globally. Deducts per category based on changes >1 (or exactly 1-2/6-7): 1-2 changes = 1 deduction, 3+ changes = 2 deductions. Floor of 1.</div>
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> Deducts exactly one point for every unit of absolute rating difference between levels. Additionally, deducts exactly one point for every relative ranking flip between any pair of websites.</div>
-                    <div><strong class="text-slate-800 uppercase">New 2:</strong> The same as New 1 except ranking flip deductions are waived if the flip was mathematically forced by the new ratings or if the websites are tied ("=").</div>
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-32 mt-auto normal-case flex flex-col justify-start">
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">OLD:</strong> Starts at 7 globally. Deducts per category based on changes >1 (or exactly 1-2/6-7): 1-2 changes = 1 deduction, 3+ changes = 2 deductions. Floor of 1.</div>
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">NEW 1:</strong> Deducts 1 pt per unit of rating difference, and 1 pt for every relative ranking flip between sites.</div>
+                    <div><strong class="text-slate-800 uppercase">NEW 2:</strong> The same as New 1 except ranking flip deductions are waived if the flip was mathematically forced by the new ratings or if the websites are tied ("=").</div>
                 </div>
             </div>
 
@@ -208,7 +204,7 @@
                 
                 <div class="flex gap-4 w-full justify-center mb-6 flex-grow">
                     <div class="w-1/2 flex flex-col gap-3">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L0</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L0</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
@@ -238,10 +234,8 @@
                         </div>
                     </div>
 
-                    <div class="w-px bg-slate-200"></div>
-
                     <div class="w-1/2 flex flex-col gap-3" :class="showL2 ? '' : 'opacity-30 grayscale'">
-                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-1 text-center">L1</div>
+                        <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest text-center">L1</div>
                         
                         <div class="flex flex-col items-center">
                             <span class="text-[9px] text-slate-500 uppercase font-bold mb-0.5">OLD</span>
@@ -272,10 +266,10 @@
                     </div>
                 </div>
 
-                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed mt-auto normal-case">
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">Old:</strong> The Journey score out of 7 minus the total global Axis deductions. Floor of 1.</div>
-                    <div class="mb-1"><strong class="text-slate-800 uppercase">New 1:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
-                    <div><strong class="text-slate-800 uppercase">New 2:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
+                <div class="text-[10px] text-slate-500 text-left pt-4 border-t border-slate-200 leading-relaxed h-32 mt-auto normal-case flex flex-col justify-start">
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">OLD:</strong> The Journey score out of 7 minus the total global Axis deductions. Floor of 1.</div>
+                    <div class="mb-1"><strong class="text-slate-800 uppercase">NEW 1:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
+                    <div><strong class="text-slate-800 uppercase">NEW 2:</strong> The aggregated sum of the Journey and Axis numerators, divided by the aggregated sum of their respective denominators.</div>
                 </div>
             </div>
 
@@ -285,7 +279,7 @@
     <div class="w-full h-px bg-slate-200 my-8"></div>
 
     <div class="mb-4">
-        <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">JOURNEY AUDIT</h2>
+        <h2 class="text-2xl font-black text-slate-800">JOURNEY AUDIT</h2>
     </div>
 
     <div v-for="(journey, jIndex) in journeys" :key="journey.id" class="bg-white mb-10">
@@ -309,8 +303,8 @@
                             <template v-for="site in websites" :key="site">
                                 <td colspan="2" class="p-1 text-center font-bold text-sm border-r border-slate-200">{{ site }}</td>
                             </template>
-                            <td :rowspan="showL2 ? 5 : 4" class="w-10 bg-slate-50 align-middle text-center">
-                                <button @click="removeStep(jIndex, sIndex)" class="text-slate-400 hover:text-red-600" title="DELETE STEP">
+                            <td :rowspan="showL2 ? 5 : 4" class="w-10 bg-white align-middle text-center">
+                                <button @click="removeStep(jIndex, sIndex)" class="text-slate-500 hover:text-red-600" title="DELETE STEP">
                                     <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </td>
@@ -402,7 +396,7 @@
     <div class="w-full h-px bg-slate-200 my-8"></div>
 
     <div class="mb-4">
-        <h2 class="text-2xl font-black text-slate-800 uppercase tracking-widest">AXIS AUDIT</h2>
+        <h2 class="text-2xl font-black text-slate-800">AXIS AUDIT</h2>
     </div>
 
     <div v-for="(cat, cIndex) in categories" :key="cat.id" class="bg-white mb-10">
@@ -413,7 +407,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 pt-4">
             <div v-for="level in ['l0', 'l1', 'l2']" :key="level" class="px-4 bg-white flex flex-col h-full" v-show="level !== 'l2' || showL2">
-                <div class="mb-4 pb-2 border-b border-slate-100 flex justify-between items-center">
+                <div class="mb-4 flex justify-between items-center">
                     <h3 class="font-black text-slate-400 uppercase tracking-widest text-sm">{{ level.toUpperCase() }}</h3>
                 </div>
 
